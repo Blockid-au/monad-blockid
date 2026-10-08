@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metropolis Submission Pack</title>
+<link rel="icon" href="assets/logo-mark.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .field { margin-bottom: 18px; }
+  .field label { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .field .box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; white-space: pre-wrap; font-size: 14.5px; }
+  .copy { font: inherit; font-size: 12.5px; font-weight: 600; border: 1px solid var(--line); background: var(--surface-2); color: var(--brand-ink); border-radius: 8px; padding: 3px 10px; cursor: pointer; }
+  .count { color: var(--ink-3); font-weight: 500; font-size: 12.5px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/logo-mark.svg" alt="">BlockID <small>Business Passport · on Monad</small></a>
+    <nav class="nav"><a href="./">Home</a><a href="deck/">Deck</a></nav>
+  </div>
+</header>
+<main class="wrap" style="padding-top:32px;padding-bottom:40px">
+  <p class="eyebrow">Monad Metropolis 2026 · submission pack</p>
+  <h2>Copy-ready fields</h2>
+  <p class="sub">Every field below matches the code on branch <code>monad</code>. Contract addresses fill in automatically once <code>scripts/monad-demo.sh</code> has published <code>monad-deploy.json</code>.</p>
+
+  <div class="field"><label>Project name <button class="copy">Copy</button></label><div class="box">BlockID Business Passport on Monad</div></div>
+
+  <div class="field"><label>Tagline <span class="count"></span><button class="copy">Copy</button></label><div class="box">Know the business you own: on-chain share register, director-approved AI updates, and dividends to every wallet in one transaction.</div></div>
+
+  <div class="field"><label>Track <button class="copy">Copy</button></label><div class="box">Track 4 — Trust, Identity &amp; AI Infrastructure</div></div>
+
+  <div class="field"><label>Description <span class="count"></span><button class="copy">Copy</button></label><div class="box">Private companies are the biggest asset class nobody can see into. Their angel, employee and family shareholders hold a PDF certificate, get an update when the founder remembers, and wait months for dividends by bank transfer. AI makes this worse, not better: a convincing update now takes seconds to write, with no evidence and no one accountable for it.
+
+Business Passport turns a company's register and reporting into a trust primitive on Monad:
+
+• ShareRegister — a permissioned ERC-20 per share class (BlockIDShareToken + IdentityRegistry). Only verified wallets can hold shares; it mirrors the company's legal register as proof of ownership, not a token sale.
+• UpdateAnchor (new) — BlockID's analysis pipeline drafts the monthly update from the company's own data and marks every claim evidenced or missing, with an evidence-confidence score. The issuer service records the draft; it is anchored only when a director of that company approves it. Directors sign with EIP-712, checked through ERC-1271, so passkey (P256 / WebAuthn) smart accounts work without a seed phrase. The recorder can never approve its own draft.
+• BatchDividend (new) — one director-declared transaction pays a stablecoin dividend pro-rata to every holder. The contract checks on-chain that the holder list is complete and duplicate-free against total supply, and it pays only after the update declaring the dividend is director-approved.
+
+Why Monad: in our Foundry benchmark a 200-holder payout is 6.56M gas in a single transaction — about US$0.016 on Monad at today's prices, against 200 separate claim transactions with a Merkle distributor. Monad's 150M-gas blocks fit a 500-holder payout in one transaction, and sub-second blocks let the director see the payout confirmed on the approval screen.
+
+Anyone can check an update without trusting us: monad.blockid.au hashes the update in the browser and calls UpdateAnchor.verify on Monad directly.
+
+Status: Monad testnet, demo company and generated sample holder wallets. No real users yet. Testnet demo; not an offer of securities or financial advice.</div></div>
+
+  <div class="field"><label>What was built during the hackathon <button class="copy">Copy</button></label><div class="box" id="built">New on branch `monad` (github.com/Blockid-au/monad-blockid/tree/monad), from 8 Oct 2026:
+- contracts/src/UpdateAnchor.sol — AI-drafted update recorded with evidence confidence; director approval directly or by EIP-712 signature (EOA or ERC-1271 smart account, nonces + deadlines); four-eyes enforced on-chain; verify(id, hash) view.
+- contracts/src/BatchDividend.sol — pro-rata stablecoin dividend to every holder in one transaction; on-chain completeness (sum of balances = total supply) and uniqueness (strictly ascending holders) checks; dust returned.
+- contracts/test/Monad.t.sol — 15 new tests (52 Foundry tests in total) incl. smart-account signature, replay and expiry; gas benchmark for 10 / 50 / 200 holders.
+- contracts/script/MonadPassport.s.sol + scripts/monad-demo.sh — deploy, record the update, director approves from a separate wallet, dividend paid only if approved, results published for the site.
+- monad.blockid.au — pitch site with in-browser verification against Monad RPC, live contract and payout data, pitch deck.
+
+Pre-existing foundation (disclosed): built in September 2026 and first shown at EAG Global Buildathon Sydney (26 Sep 2026) — BlockIDShareToken, IdentityRegistry, Merkle DividendDistributor, CapTableAnchor, AgentProvenance, and the BlockID web app / analysis pipeline at eth.blockid.au. Full history in the repository.</div></div>
+
+  <div class="field"><label>Links <button class="copy">Copy</button></label><div class="box" id="links">Code: https://github.com/Blockid-au/monad-blockid/tree/monad (MIT)
+Live site: https://monad.blockid.au
+Deck: https://monad.blockid.au/deck/ · PDF https://monad.blockid.au/deck/BlockID-Business-Passport-Monad.pdf
+Network: Monad testnet (chain id 10143)
+Contracts: <span id="addr">pending testnet deploy</span>
+Demo video: [add after recording]</div></div>
+
+  <div class="field"><label>Team <button class="copy">Copy</button></label><div class="box">Do Van Long — co-founder &amp; CEO; founder of Vietnam Blockchain Corporation (2016) and Auschain Pty Ltd (Sydney); former CTO. https://au.linkedin.com/in/dovanlong
+Truong Quoc Tuan — co-founder; investor-side and capital-markets experience (Dragon Capital Group). https://www.linkedin.com/in/tuantruong858/
+Contact: admin@blockid.au</div></div>
+
+  <h2 style="margin-top:36px">Demo video script (≈ 2:30)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Time</th><th>Screen</th><th>Voice-over</th></tr></thead>
+    <tbody>
+      <tr><td>0:00</td><td>monad.blockid.au hero</td><td>"If you own 2% of a private company, today you own a PDF. No live register, no updates you can trust, dividends months late."</td></tr>
+      <tr><td>0:20</td><td>Explorer: share token, 20 holders</td><td>"Business Passport keeps the share register on Monad. Only verified wallets can hold shares."</td></tr>
+      <tr><td>0:45</td><td>Update card: evidenced / missing, 82%</td><td>"Our pipeline drafts the monthly update from the company's data and marks every claim evidenced or missing. The draft is recorded on Monad, but it isn't final."</td></tr>
+      <tr><td>1:10</td><td>Director approve tx, <code>UpdateAnchored</code> event</td><td>"Only a director can approve it, from a different wallet, or a passkey smart account. The AI never holds a key."</td></tr>
+      <tr><td>1:35</td><td>Dividend tx: 20 transfers in one transaction, gas</td><td>"Now the dividend: one transaction pays every holder pro-rata. The contract refuses if anyone is left out, or if the update wasn't approved."</td></tr>
+      <tr><td>2:00</td><td>Verify button → PASS; benchmark table</td><td>"Anyone can check it without trusting us. And on Monad a 200-holder payout costs under two cents."</td></tr>
+      <tr><td>2:20</td><td>Title slide</td><td>"Business Passport: know the business you own. Built on Monad."</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Testnet demo. Not an offer of securities or financial advice. Sample data only; no real users yet.</p>
+</main>
+<script src="assets/submission.js"></script>
+</body>
+</html>

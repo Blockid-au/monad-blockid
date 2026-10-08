@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business Passport Deck</title>
+<link rel="icon" href="../assets/logo-mark.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0d0c1a; --ink:#f1f0fa; --ink2:#c3c0dc; --ink3:#8e8aab; --brand:#8f7bff; --ok:#3fd29b; --warn:#ffb547;
+    --card:#17152e; --line:#2b2850; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #07060f; color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .slide { position: absolute; left: 50%; top: 50%; width: 1280px; height: 720px; transform-origin: center;
+    background: radial-gradient(1200px 600px at 85% -10%, #2a1f6e 0%, transparent 60%), var(--bg);
+    padding: 64px 72px; display: none; flex-direction: column; }
+  .slide.on { display: flex; }
+  .kick { font-size: 15px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); margin: 0 0 14px; }
+  h1 { font-size: 72px; line-height: 1.04; letter-spacing: -.02em; margin: 0 0 22px; }
+  h2 { font-size: 46px; line-height: 1.12; letter-spacing: -.015em; margin: 0 0 26px; }
+  h1 em, h2 em { font-style: normal; color: var(--brand); }
+  p.lead { font-size: 25px; line-height: 1.45; color: var(--ink2); margin: 0 0 22px; max-width: 1000px; }
+  .row { display: grid; gap: 18px; }
+  .c2 { grid-template-columns: 1fr 1fr; } .c3 { grid-template-columns: repeat(3, 1fr); } .c4 { grid-template-columns: repeat(4, 1fr); }
+  .c5 { grid-template-columns: repeat(5, 1fr); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card h3 { margin: 0 0 8px; font-size: 23px; }
+  .card p { margin: 0; color: var(--ink2); font-size: 18px; line-height: 1.45; }
+  .card .n { color: var(--brand); font-weight: 800; font-size: 15px; margin-bottom: 8px; }
+  .card.hum { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+  .who { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+  .hum .who { color: var(--brand); }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .9em; color: #d9d3ff; }
+  table { width: 100%; border-collapse: collapse; font-size: 21px; }
+  th, td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; }
+  th { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); }
+  td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.hl td { background: rgba(143,123,255,.12); font-weight: 700; }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; color: var(--ink3); font-size: 14px; padding-top: 18px; }
+  .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+  .chip { font-size: 15px; font-weight: 700; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); color: #d9d3ff; background: #1b1838; }
+  .badge { font-size: 13px; font-weight: 800; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; margin-right: 10px; }
+  .ok { background: #0f2e24; color: var(--ok); } .miss { background: #33250d; color: var(--warn); }
+  ul.claims { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 20px; }
+  ul.check { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 20px; color: var(--ink2); }
+  ul.check li::before { content: "✓  "; color: var(--ok); font-weight: 800; }
+  ul.check li.todo::before { content: "○  "; color: var(--ink3); }
+  .big { font-size: 64px; font-weight: 800; color: var(--brand); line-height: 1; }
+  .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 20px; margin-bottom: 48px; }
+  .logo img { width: 40px; height: 40px; }
+  .nav { position: fixed; bottom: 14px; right: 18px; color: #8e8aab; font: 13px Inter, sans-serif; z-index: 5; }
+  .nav button { background: #1b1838; color: #d9d3ff; border: 1px solid #2b2850; border-radius: 8px; padding: 6px 12px; cursor: pointer; font: inherit; }
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { background: var(--bg); }
+    .deck { width: auto; height: auto; overflow: visible; }
+    .slide { position: relative; left: 0; top: 0; transform: none !important; display: flex !important; page-break-after: always; break-after: page; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide">
+  <div class="logo"><img src="../assets/logo-mark.svg" alt="">BlockID Business Passport</div>
+  <div class="chips"><span class="chip">Monad Metropolis 2026</span><span class="chip">Track 4 · Trust, Identity &amp; AI Infrastructure</span><span class="chip">Monad testnet</span></div>
+  <h1>Know the business<br><em>you own.</em></h1>
+  <p class="lead">An on-chain share register, AI-drafted updates a director must approve, and dividends paid to every shareholder's wallet in one transaction.</p>
+  <div class="foot"><span>monad.blockid.au</span><span>github.com/Blockid-au/monad-blockid</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <p class="kick">The problem</p>
+  <h2>If you own 2% of a private company,<br>today you own <em>a PDF</em>.</h2>
+  <div class="row c4">
+    <div class="card"><div class="n">01</div><h3>No live register</h3><p>A certificate and a spreadsheet reconciled by hand at every round.</p></div>
+    <div class="card"><div class="n">02</div><h3>Updates you can't trust</h3><p>They arrive when the founder remembers. Data or marketing? Investors can't tell.</p></div>
+    <div class="card"><div class="n">03</div><h3>AI makes it worse</h3><p>A convincing update now takes seconds. Without evidence and a signer, it's noise.</p></div>
+    <div class="card"><div class="n">04</div><h3>Slow dividends</h3><p>Bank transfers, months late, one holder at a time.</p></div>
+  </div>
+  <div class="foot"><span>Angel, employee and family shareholders of private companies</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <p class="kick">The product</p>
+  <h2>Three contracts on Monad.</h2>
+  <div class="row c3">
+    <div class="card"><h3>ShareRegister</h3><p>Permissioned ERC-20 per share class. Only verified wallets hold shares. Mirrors the company's legal register: proof of ownership, not a token sale.</p></div>
+    <div class="card"><h3>UpdateAnchor <span class="badge ok">new</span></h3><p>AI-drafted update with an evidence-confidence score. Anchored only when a director of that company approves. EOA or passkey smart-account signatures.</p></div>
+    <div class="card"><h3>BatchDividend <span class="badge ok">new</span></h3><p>One transaction pays a stablecoin dividend pro-rata to every holder. The contract checks nobody is left out and nobody is counted twice.</p></div>
+  </div>
+  <div class="foot"><span>BlockIDShareToken + IdentityRegistry · UpdateAnchor · BatchDividend</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <p class="kick">How it works</p>
+  <h2>AI proposes. A director signs.<br>Monad records. Every holder gets paid.</h2>
+  <div class="row c5">
+    <div class="card"><div class="who">Company</div><h3>Connects data</h3><p>Stripe, Xero, GA4, GitHub.</p></div>
+    <div class="card"><div class="who">AI pipeline</div><h3>Drafts</h3><p>Each claim: evidenced or missing. Confidence score.</p></div>
+    <div class="card"><div class="who">Issuer service</div><h3>Records</h3><p><code>propose()</code>: hash, confidence, counts.</p></div>
+    <div class="card hum"><div class="who">Director</div><h3>Signs</h3><p>EIP-712, checked via ERC-1271. Never the recorder.</p></div>
+    <div class="card"><div class="who">Monad</div><h3>Anchors + pays</h3><p><code>UpdateAnchored</code>, then one-tx dividend.</p></div>
+  </div>
+  <p class="lead" style="margin-top:28px;font-size:22px">The AI never holds a key and never moves money. The dividend contract refuses to pay until the director's approval is on-chain.</p>
+  <div class="foot"><span>Human-in-the-loop by construction</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <p class="kick">What a shareholder sees</p>
+  <h2>What is backed by data, and what isn't.</h2>
+  <div class="row c2">
+    <div class="card">
+      <h3>Demo Startup Pty Ltd · Sep 2026 <span style="color:var(--ink3);font-size:16px">(sample, test data)</span></h3>
+      <p style="margin-bottom:14px">Evidence confidence <b style="color:var(--ok)">82%</b></p>
+      <ul class="claims">
+        <li><span class="badge ok">evidenced</span>Revenue A$41,200, up 30%</li>
+        <li><span class="badge ok">evidenced</span>Gross margin 71%</li>
+        <li><span class="badge ok">evidenced</span>Two product releases shipped</li>
+        <li><span class="badge miss">missing</span>LOI with a national retailer</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Check it yourself</h3>
+      <p>The browser hashes the update (keccak256) and calls <code>UpdateAnchor.verify(id, hash)</code> on Monad directly. No BlockID server is trusted.</p>
+      <p style="margin-top:18px;font-size:22px;color:var(--ok);font-weight:700">Result: ✓ PASS — a director approved exactly this content.</p>
+      <p style="margin-top:18px">Try it: monad.blockid.au/#update</p>
+    </div>
+  </div>
+  <div class="foot"><span>Claims marked evidenced / missing, with a responsible signer</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <p class="kick">Why Monad</p>
+  <h2>A 200-holder dividend for <em>under 2 cents</em>.</h2>
+  <table>
+    <thead><tr><th>200-holder dividend</th><th class="r">Gas</th><th class="r">Txs</th><th class="r">Monad</th><th class="r">Ethereum L1</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><code>BatchDividend</code> (push, new)</td><td class="r">6.56M</td><td class="r">1</td><td class="r">≈ $0.016</td><td class="r">≈ $2.56</td></tr>
+      <tr><td><code>DividendDistributor</code> (Merkle claims)</td><td class="r">≈ 22.6M</td><td class="r">200</td><td class="r">≈ $0.055</td><td class="r">≈ $8.81</td></tr>
+    </tbody>
+  </table>
+  <div class="row c3" style="margin-top:24px">
+    <div class="card"><h3>Flat cost</h3><p>Cents per run at 20 or 500 holders.</p></div>
+    <div class="card"><h3>Room in the block</h3><p>500 holders ≈ 16M gas: one tx in a 150M-gas block.</p></div>
+    <div class="card"><h3>Fast finality</h3><p>Payout confirmed while the director is still on the screen.</p></div>
+  </div>
+  <div class="foot"><span>Foundry benchmark · gas &amp; prices read 8 Oct 2026 (Monad 102 gwei, MON $0.0241; ETH 0.158 gwei, $2,476). At 10 gwei, L1 batch ≈ $160.</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <p class="kick">Why Track 4</p>
+  <h2>A trust layer for what companies<br>say about themselves.</h2>
+  <div class="row c3">
+    <div class="card"><h3>Human-gated AI attestations</h3><p>AI output becomes a record only after a named director signs. Four-eyes enforced on-chain: the recorder can't approve its own draft.</p></div>
+    <div class="card"><h3>Passkey-ready signers</h3><p>EIP-712 approvals checked through ERC-1271: P256 / WebAuthn smart accounts work with no seed phrase. Anyone can relay; nonces and deadlines stop replay.</p></div>
+    <div class="card"><h3>Identity of a legal object</h3><p>A verified-wallet register mirroring a real company's register, with constitution and valuation report hashes on-chain.</p></div>
+  </div>
+  <div class="foot"><span>Trust · Identity · AI infrastructure</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <p class="kick">Built during Metropolis</p>
+  <h2>New on Monad, and what came before.</h2>
+  <div class="row c2">
+    <div class="card">
+      <h3>New (branch <code>monad</code>)</h3>
+      <ul class="check">
+        <li><code>UpdateAnchor.sol</code>: director approval, EIP-712 / ERC-1271</li>
+        <li><code>BatchDividend.sol</code>: one-tx payout, completeness check</li>
+        <li>15 new tests (52 total) + gas benchmark</li>
+        <li>Deploy script: propose → approve → pay → publish</li>
+        <li>monad.blockid.au with in-browser verification</li>
+        <li class="todo" id="deck-deploy">Live on Monad testnet</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Pre-existing foundation (disclosed)</h3>
+      <p>Built in September 2026, first shown at EAG Global Buildathon Sydney on 26 Sep: share register contracts, Merkle dividend distributor, cap-table anchor, agent provenance, and the BlockID app and analysis pipeline (eth.blockid.au). Full history in the repo.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Judges: see commit history on github.com/Blockid-au/monad-blockid</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <p class="kick">Business</p>
+  <h2>Software revenue, no token.</h2>
+  <div class="row c2">
+    <div class="card">
+      <h3>How we earn</h3>
+      <ul class="check">
+        <li>Issuance fee to set up the register</li>
+        <li>Cap-table and reporting SaaS per company</li>
+        <li>Transfer-agent fee per transfer</li>
+        <li>0.5–1% of dividend rounds paid through the platform</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Honest status</h3>
+      <ul class="check">
+        <li class="todo">Testnet only; not an offer of securities</li>
+        <li class="todo">No real users yet: app companies are sample listings from public information</li>
+        <li class="todo">First market: Australian private companies (Pty Ltd), then Vietnam</li>
+        <li class="todo">Real pilots counted separately once they sign up</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Australia first · Vietnam next</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <p class="kick">Team &amp; next</p>
+  <h2>Built in house, Sydney + Ho Chi Minh City.</h2>
+  <div class="row c3">
+    <div class="card"><h3>Do Van Long</h3><p>Co-founder &amp; CEO. Founder, Vietnam Blockchain Corporation (2016) and Auschain Pty Ltd. Former CTO. Australia Global Talent visa.</p></div>
+    <div class="card"><h3>Truong Quoc Tuan</h3><p>Co-founder. Investor-side and capital-markets experience (Dragon Capital Group). Sydney.</p></div>
+    <div class="card"><h3>Next 8 weeks</h3><p>Passkey director sign-in in the app · shareholder feed indexed from Monad · audit · first pilot companies, then mainnet.</p></div>
+  </div>
+  <p class="lead" style="margin-top:30px">Business Passport: know the business you own. <em style="font-style:normal;color:var(--brand)">Built on Monad.</em></p>
+  <div class="foot"><span>admin@blockid.au · monad.blockid.au</span><span>Testnet demo. Not an offer of securities or financial advice.</span></div>
+</section>
+
+</div>
+<div class="nav"><button id="prev" type="button">←</button> <span id="pos">1 / 10</span> <button id="next" type="button">→</button></div>
+<script src="deck.js"></script>
+</body>
+</html>

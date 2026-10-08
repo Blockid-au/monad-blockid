@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlockID Business Passport on Monad</title>
+<meta name="description" content="Know the business you own: on-chain share register, AI-drafted updates a director must approve, and dividends paid to every shareholder's wallet in one transaction. Monad Metropolis 2026, Track 4.">
+<meta property="og:title" content="BlockID Business Passport on Monad">
+<meta property="og:description" content="On-chain share register, director-approved AI updates, one-transaction dividends. Monad Metropolis 2026 — Track 4: Trust, Identity & AI Infrastructure.">
+<meta property="og:image" content="https://monad.blockid.au/assets/og.png">
+<link rel="icon" href="assets/logo-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/logo-mark.svg" alt="">BlockID <small>Business Passport · on Monad</small></a>
+    <nav class="nav">
+      <a class="hide-sm" href="#how" data-i18n="nav.how">How it works</a>
+      <a class="hide-sm" href="#live" data-i18n="nav.live">Live on Monad</a>
+      <a class="hide-sm" href="#why" data-i18n="nav.why">Why Monad</a>
+      <a href="deck/" data-i18n="nav.deck">Deck</a>
+      <a class="hide-sm" href="submission.html" data-i18n="nav.sub">Submission</a>
+      <button class="lang" id="lang" type="button" aria-label="Switch language">VI</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap hero">
+  <div class="chips">
+    <span class="chip">Monad Metropolis 2026</span>
+    <span class="chip">Track 4 · Trust, Identity &amp; AI Infrastructure</span>
+    <span class="chip" id="chip-net">Monad testnet · chain 10143</span>
+    <span class="chip">Open source · MIT</span>
+  </div>
+  <h1 data-i18n-html="hero.h1">Know the business <em>you own</em>.</h1>
+  <p class="lede" data-i18n="hero.lede">If you own 2% of a private company, today you own a PDF. Business Passport gives every shareholder a live
+    share register on Monad, monthly updates drafted by AI from the company's own data and signed off by a director,
+    and dividends paid to every wallet in a single transaction.</p>
+  <div class="cta">
+    <a class="btn primary" href="#live" data-i18n="cta.live">See it on Monad</a>
+    <a class="btn" href="deck/" data-i18n="cta.deck">Open the pitch deck</a>
+    <a class="btn" href="https://github.com/Blockid-au/monad-blockid/tree/monad" data-i18n="cta.code">Read the code</a>
+  </div>
+</div>
+
+<section id="problem">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="p.eyebrow">The problem</p>
+    <h2 data-i18n="p.h2">Private companies are the biggest asset class nobody can see into.</h2>
+    <p class="sub" data-i18n="p.sub">Angel, employee and family shareholders hold a certificate and wait. Australia alone has
+      millions of private companies, and their registers live in spreadsheets reconciled by hand.</p>
+    <div class="grid g4">
+      <div class="card"><div class="num">01</div><h3 data-i18n="p1.h">No live register</h3><p data-i18n="p1.t">Ownership is a PDF certificate and a spreadsheet. Nobody can check it.</p></div>
+      <div class="card"><div class="num">02</div><h3 data-i18n="p2.h">Updates you can't trust</h3><p data-i18n="p2.t">Updates arrive when the founder remembers. Investors can't tell data from marketing.</p></div>
+      <div class="card"><div class="num">03</div><h3 data-i18n="p3.h">AI makes it worse</h3><p data-i18n="p3.t">AI can write a convincing update in seconds. Without evidence and a responsible signer, it is just more noise.</p></div>
+      <div class="card"><div class="num">04</div><h3 data-i18n="p4.h">Slow dividends</h3><p data-i18n="p4.t">Paid by bank transfer, months late, holder by holder.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="h.eyebrow">How it works on Monad</p>
+    <h2 data-i18n="h.h2">AI proposes. A director signs. Monad records. Every holder gets paid.</h2>
+    <p class="sub" data-i18n="h.sub">The AI never holds a key and never moves money. Its output becomes a shareholder record only after a
+      named human approves it, and the dividend contract refuses to pay until that approval is on-chain.</p>
+    <div class="flow">
+      <div class="step"><span class="who" data-i18n="f1.who">Company</span><b data-i18n="f1.b">Connects its data</b><span data-i18n="f1.t">Stripe, Xero, GA4, GitHub.</span></div>
+      <div class="step"><span class="who" data-i18n="f2.who">AI pipeline</span><b data-i18n="f2.b">Drafts the update</b><span data-i18n="f2.t">Every claim marked evidenced or missing, with a confidence score.</span></div>
+      <div class="step"><span class="who" data-i18n="f3.who">Issuer service</span><b data-i18n="f3.b">Records the draft</b><span data-i18n="f3.t"><code>UpdateAnchor.propose</code>: content hash, confidence, counts.</span></div>
+      <div class="step human"><span class="who" data-i18n="f4.who">Director (human)</span><b data-i18n="f4.b">Approves and signs</b><span data-i18n="f4.t">Wallet, or passkey smart account via EIP-712 + ERC-1271. Cannot be the recorder.</span></div>
+      <div class="step"><span class="who" data-i18n="f5.who">Monad</span><b data-i18n="f5.b">Anchors and pays</b><span data-i18n="f5.t"><code>UpdateAnchored</code> event; <code>BatchDividend</code> pays every holder in one transaction.</span></div>
+    </div>
+
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><h3>ShareRegister</h3><p data-i18n="c1">Permissioned ERC-20 per share class (<code>BlockIDShareToken</code> + <code>IdentityRegistry</code>). Only verified wallets can hold shares. Mirrors the legal register: proof of ownership, not a token sale.</p></div>
+      <div class="card"><h3>UpdateAnchor <span class="chip ok" data-i18n="new">New</span></h3><p data-i18n="c2">AI-drafted update recorded with an evidence-confidence score and evidenced / missing counts; anchored only when a director of that company approves. Signatures from EOAs or ERC-1271 smart accounts; nonces and deadlines stop replay.</p></div>
+      <div class="card"><h3>BatchDividend <span class="chip ok" data-i18n="new">New</span></h3><p data-i18n="c3">One director-declared transaction pays a stablecoin dividend pro-rata to every holder. The contract checks the holder list is complete and duplicate-free against total supply. Per-holder events are the payment record.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="update">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="u.eyebrow">What a shareholder sees</p>
+    <h2 data-i18n="u.h2">An update that shows what is backed by data, and what isn't.</h2>
+    <p class="sub" data-i18n="u.sub">Sample update for a demo company (test data, not a customer). Its exact bytes are hashed and anchored on Monad.</p>
+    <div class="grid g2">
+      <div class="card">
+        <h3 id="u-company">—</h3>
+        <p id="u-summary" style="margin-bottom:12px">—</p>
+        <div style="font-size:14px;color:var(--ink-2)"><span data-i18n="u.conf">Evidence confidence</span>: <b id="u-conf">—</b></div>
+        <div class="meter"><i id="u-meter" style="width:0"></i></div>
+        <ul class="claims" id="u-claims" style="margin-top:14px"></ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="v.h">Check it yourself</h3>
+        <p data-i18n="v.t">Your browser downloads the update, hashes it (keccak256) and asks Monad whether a director approved exactly that content. No BlockID server is trusted.</p>
+        <p style="margin-top:14px"><button class="btn primary" id="verify-btn" type="button" data-i18n="v.btn">Verify on Monad</button></p>
+        <div class="verify-out" id="verify-out" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="live">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="l.eyebrow">Live on Monad testnet</p>
+    <h2 data-i18n="l.h2">Contracts, transactions and balances, read from the chain.</h2>
+    <p class="sub" id="live-status" data-i18n="l.pending">Deployment to Monad testnet is pending. The full flow already runs end to end on a local chain; addresses appear here as soon as the deploy script finishes.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th data-i18n="l.c">Contract / step</th><th data-i18n="l.a">Address or transaction</th></tr></thead>
+      <tbody id="live-rows"><tr><td>ShareRegister · UpdateAnchor · BatchDividend</td><td class="note" data-i18n="l.wait">Pending testnet deploy</td></tr></tbody>
+    </table></div>
+    <h3 style="margin-top:24px" data-i18n="l.hold">Dividend paid in one transaction</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th data-i18n="l.h1">Holder wallet (sample)</th><th class="r" data-i18n="l.h2c">Shares</th><th class="r" data-i18n="l.h3">Dividend (mAUD)</th></tr></thead>
+      <tbody id="holder-rows"><tr><td colspan="3" class="note" data-i18n="l.none">Shown after the dividend round is paid on Monad.</td></tr></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="w.eyebrow">Why Monad</p>
+    <h2 data-i18n="w.h2">Paying every holder in one transaction is cheap and fast on Monad.</h2>
+    <p class="sub" data-i18n="w.sub">Measured with Foundry (<code>forge test --match-test bench</code>). Costs use gas prices and token prices read on 8 Oct 2026, 23:43 UTC.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th data-i18n="w.t0">200-holder dividend</th><th class="r" data-i18n="w.t1">Gas</th><th class="r" data-i18n="w.t2">Transactions</th><th class="r">Monad</th><th class="r">Ethereum L1</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><code>BatchDividend</code> <span data-i18n="w.r1">(push, new)</span></td><td class="r">6.56M</td><td class="r">1</td><td class="r">≈ US$0.016</td><td class="r">≈ US$2.56</td></tr>
+        <tr><td><code>DividendDistributor</code> <span data-i18n="w.r2">(Merkle claim per holder)</span></td><td class="r">≈ 22.6M</td><td class="r">200</td><td class="r">≈ US$0.055</td><td class="r">≈ US$8.81</td></tr>
+        <tr><td data-i18n="w.r3">Gas per holder, batch of 10 / 50 / 200</td><td class="r">53k / 36k / 33k</td><td class="r">—</td><td class="r">—</td><td class="r">—</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" data-i18n="w.note">Monad 102 gwei, MON US$0.0241; Ethereum 0.158 gwei, ETH US$2,476 (CoinGecko, public RPCs). Ethereum gas is unusually low today; at 10 gwei the same batch costs ≈ US$160 on L1. Monad charges the gas limit, so the script sets it from an estimate.</p>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card"><h3 data-i18n="w1.h">Cost that stays flat</h3><p data-i18n="w1.t">A few cents per dividend run, whether a company has 20 holders or 500. Small companies can afford monthly payouts and weekly re-anchoring.</p></div>
+      <div class="card"><h3 data-i18n="w2.h">Room in the block</h3><p data-i18n="w2.t">150M gas blocks: a 500-holder payout (≈ 16M gas) fits in one transaction, and many companies' payouts can land in the same block.</p></div>
+      <div class="card"><h3 data-i18n="w3.h">Fast finality</h3><p data-i18n="w3.t">Sub-second blocks: the director sees the payout confirmed while still on the approval screen, and shareholders see it moments later.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="track">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="t.eyebrow">Why Track 4</p>
+    <h2 data-i18n="t.h2">A trust layer for what companies say about themselves.</h2>
+    <div class="grid g3">
+      <div class="card"><h3 data-i18n="t1.h">Human-gated AI attestations</h3><p data-i18n="t1.t">AI output becomes a record only after a named director signs. The recorder can never approve its own draft (four-eyes, enforced on-chain).</p></div>
+      <div class="card"><h3 data-i18n="t2.h">Smart-account signers</h3><p data-i18n="t2.t">Directors approve with an EIP-712 signature checked through ERC-1271, so passkey (P256 / WebAuthn) smart accounts work without a seed phrase. Anyone can relay it.</p></div>
+      <div class="card"><h3 data-i18n="t3.h">Identity of the legal object</h3><p data-i18n="t3.t">Verified-wallet register mirroring a real company's share register, with the constitution and valuation report hashes on-chain.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="built">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="b.eyebrow">Built during Metropolis</p>
+    <h2 data-i18n="b.h2">What is new, and what came before.</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3 data-i18n="b.new">New for Monad (branch <code>monad</code>)</h3>
+        <ul class="check" id="built-list">
+          <li data-i18n="b1"><code>UpdateAnchor.sol</code>: AI-drafted updates, director approval, EIP-712 / ERC-1271 signatures</li>
+          <li data-i18n="b2"><code>BatchDividend.sol</code>: one-transaction pro-rata payout with on-chain completeness check</li>
+          <li data-i18n="b3">15 new Foundry tests (52 in total) and the gas benchmark above</li>
+          <li data-i18n="b4"><code>MonadPassport.s.sol</code> + <code>scripts/monad-demo.sh</code>: deploy, propose, approve, pay, publish</li>
+          <li data-i18n="b5">This site, with in-browser verification against Monad</li>
+          <li class="todo" id="b-deploy" data-i18n="b6">Deployed to Monad testnet</li>
+          <li class="todo" data-i18n="b7">Passkey sign-in screen for directors in the BlockID app</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="b.pre">Pre-existing foundation (disclosed)</h3>
+        <p data-i18n="b.pret">Built in September 2026 and first shown at the EAG Global Buildathon in Sydney on 26 Sep: the share register
+          contracts (<code>BlockIDShareToken</code>, <code>IdentityRegistry</code>), the Merkle <code>DividendDistributor</code>,
+          <code>CapTableAnchor</code>, <code>AgentProvenance</code>, and the BlockID web app and analysis pipeline at
+          eth.blockid.au. Full history is in the repository; the Monad work is on the <code>monad</code> branch from 8 Oct 2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="s.eyebrow">Honest status</p>
+    <h2 data-i18n="s.h2">Where we are today.</h2>
+    <div class="grid g3">
+      <div class="card"><h3 data-i18n="s1.h">Testnet only</h3><p data-i18n="s1.t">Monad testnet, demo company, generated sample holder wallets. Not an offer of securities.</p></div>
+      <div class="card"><h3 data-i18n="s2.h">No real users yet</h3><p data-i18n="s2.t">The companies in the BlockID app are sample listings built from public information, not customers. Real pilots will be counted separately once they sign up.</p></div>
+      <div class="card"><h3 data-i18n="s3.h">Next</h3><p data-i18n="s3.t">Passkey director sign-in, a shareholder feed indexed from Monad, an audit, then mainnet with the first pilot companies.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="tm.eyebrow">Team</p>
+    <h2 data-i18n="tm.h2">Built in house, from Sydney and Ho Chi Minh City.</h2>
+    <div class="grid g2">
+      <div class="card"><h3>Do Van Long</h3><p data-i18n="tm1">Co-founder &amp; CEO. Founder of Vietnam Blockchain Corporation (2016) and Auschain Pty Ltd (Sydney). Former CTO; Australia Global Talent visa. <a href="https://au.linkedin.com/in/dovanlong">LinkedIn</a></p></div>
+      <div class="card"><h3>Truong Quoc Tuan</h3><p data-i18n="tm2">Co-founder. Investor-side and capital-markets experience (Dragon Capital Group); University of Hawai'i Shidler College of Business. Based in Sydney. <a href="https://www.linkedin.com/in/tuantruong858/">LinkedIn</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="k.eyebrow">Links</p>
+    <div class="table-wrap"><table><tbody>
+      <tr><td data-i18n="k1">Code (MIT)</td><td><a href="https://github.com/Blockid-au/monad-blockid/tree/monad">github.com/Blockid-au/monad-blockid</a> · <span data-i18n="k1b">branch</span> <code>monad</code></td></tr>
+      <tr><td data-i18n="k2">Pitch deck</td><td><a href="deck/">monad.blockid.au/deck</a> · <a href="deck/BlockID-Business-Passport-Monad.pdf">PDF</a></td></tr>
+      <tr><td data-i18n="k3">Demo video</td><td id="video-cell"><span data-i18n="k3t">Monad demo video: recorded after the testnet deploy.</span> <a href="https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4" data-i18n="k3l">Product walkthrough (pre-Monad, 5 min)</a></td></tr>
+      <tr><td data-i18n="k4">BlockID app</td><td><a href="https://eth.blockid.au">eth.blockid.au</a></td></tr>
+      <tr><td data-i18n="k5">Contact</td><td><a href="mailto:admin@blockid.au">admin@blockid.au</a></td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="legal" data-i18n="legal">Testnet demo. Not an offer of securities or financial advice.</p>
+    <p>BlockID™ · Auschain Pty Ltd (ABN 79 659 615 111) · Built on Monad testnet for Monad Metropolis 2026. Monad is a trademark of its owner; this project is not affiliated with or endorsed by the Monad Foundation.</p>
+  </div>
+</footer>
+
+<script src="assets/sha3.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
