@@ -9,7 +9,8 @@ import {DemoAUD} from "../src/DemoAUD.sol";
 import {CapTableAnchor} from "../src/CapTableAnchor.sol";
 import {AgentProvenance} from "../src/AgentProvenance.sol";
 
-/// @notice TESTNET demo on HashKey Chain (chain id 133): the full BlockID RWA stack plus AgentProvenance.
+/// @notice TESTNET demo on HashKey Chain (chain id 133) and Monad testnet (chain id 10143, scripts/monad-demo.sh):
+///         the full BlockID RWA stack plus AgentProvenance. Output file: env DEMO_OUT (default hsk-demo.json).
 ///         Two phases so a *different* human wallet approves the agents' proposals in between:
 ///           1) propose(): deploy, register agents, record the valuation agent's SVI report hash (Proposed)
 ///           -- approver wallet calls AgentProvenance.approve(0) (scripts/hsk-demo.sh, cast send) --
@@ -18,12 +19,15 @@ import {AgentProvenance} from "../src/AgentProvenance.sol";
 ///         DEMO ONLY: the deployer plays issuer Safe, KYC agent and transfer agent (production: Safe multisig).
 contract HskDemo is Script {
     string constant FIXTURE = "./test/fixtures/dividend_round.json";
-    string constant OUT = "./deployments/out/hsk-demo.json";
     string constant CAPTABLE = "./deployments/params/hsk-captable.json";
 
     bytes32 constant AGENT_RESEARCH = keccak256("blockid.agent.research");
     bytes32 constant AGENT_VALUATION = keccak256("blockid.agent.valuation");
     bytes32 constant AGENT_DIVIDEND = keccak256("blockid.agent.dividend");
+
+    function _out() internal view returns (string memory) {
+        return vm.envOr("DEMO_OUT", string("./deployments/out/hsk-demo.json"));
+    }
 
     function propose() external {
         address relayer = vm.envAddress("RELAYER");
@@ -86,14 +90,14 @@ contract HskDemo is Script {
         vm.serializeAddress(o, "payToken", address(aud));
         vm.serializeAddress(o, "capTableAnchor", address(anchorC));
         vm.serializeBytes32(o, "reportHash", reportHash);
-        vm.writeJson(vm.serializeUint(o, "proposalId", id), OUT);
+        vm.writeJson(vm.serializeUint(o, "proposalId", id), _out());
 
         console2.log("AgentProvenance    ", address(prov));
         console2.log("proposal id        ", id);
     }
 
     function execute() external {
-        string memory d = vm.readFile(OUT);
+        string memory d = vm.readFile(_out());
         string memory fx = vm.readFile(FIXTURE);
         AgentProvenance prov = AgentProvenance(vm.parseJsonAddress(d, ".agentProvenance"));
         IdentityRegistry reg = IdentityRegistry(vm.parseJsonAddress(d, ".identityRegistry"));

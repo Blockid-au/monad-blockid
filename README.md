@@ -25,6 +25,7 @@ paid straight to their wallet.
 | Verify any company (browser-side hash check) | https://eth.blockid.au/verify/EBA |
 | BlockID EVM explorer (Blockscout) | https://scan.blockid.au |
 | HashKey Chain page | https://eth.blockid.au/hsk |
+| Monad Metropolis 2026 (Track 4) | [docs/MONAD.md](docs/MONAD.md) · branch `monad` · Monad testnet (chain 10143) |
 | Pitch deck (3 min) | [PDF](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pdf) · [PPTX](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pptx) |
 | Video | Demo, 3 min: https://eth.blockid.au/deck/blockid-business-passport-demo-3min-captions.mp4 · full demo, 5:15: https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4 · pitch (slides), 3 min: https://eth.blockid.au/deck/blockid-business-passport-3min-captions.mp4 |
 | Hackathon write-up · demo script | [docs/HACKATHON.md](docs/HACKATHON.md) · [docs/DEMO.md](docs/DEMO.md) |

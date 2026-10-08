@@ -33,3 +33,5 @@ sepolia = "${SEPOLIA_RPC_URL}"
 hoodi = "https://ethereum-hoodi-rpc.publicnode.com"
 # HashKey Chain testnet (chain id 133) — EAG hackathon HSK track
 hsk_testnet = "https://testnet.hsk.xyz"
+# Monad testnet (chain id 10143) — Monad Metropolis 2026
+monad_testnet = "https://testnet-rpc.monad.xyz"
