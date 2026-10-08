@@ -24,6 +24,15 @@ TXLOG="$ROOT/contracts/deployments/out/monad-txs.json"
 
 [[ $(cast chain-id --rpc-url "$RPC") == 10143 ]] || { echo "RPC is not Monad testnet"; exit 1; }
 echo "== deployer $DEPLOYER balance: $(cast from-wei "$(cast balance "$DEPLOYER" --rpc-url "$RPC")") MON"
+# Top up the approver (1 tx) and relayer (3 txs) from the deployer so only the deployer needs the faucet.
+TOPUP="${MONAD_TOPUP:-0.1ether}"; MIN=$(cast to-wei 0.05)
+for W in "$APPROVER" "$RELAYER"; do
+  if [[ $(cast balance "$W" --rpc-url "$RPC") -lt $MIN ]]; then
+    cast send "$W" --value "$TOPUP" --rpc-url "$RPC" \
+      --account blockid-deployer --password-file "$KEYS/deployer.password" >/dev/null
+    echo "   topped up $W with $TOPUP"
+  fi
+done
 REPORT_HASH=$(cast keccak "$(cat "$REPORT")")
 echo "== SVI report hash (AI output provenance): $REPORT_HASH"
 [[ -f $TXLOG ]] || echo '{}' > "$TXLOG"
