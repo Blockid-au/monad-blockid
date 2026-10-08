@@ -1,109 +1,97 @@
 #!/usr/bin/env bash
 # End-to-end TESTNET demo on Monad testnet (chain id 10143) — Monad Metropolis 2026, Track 4.
-#   1) deployer (issuer service): deploy AgentProvenance + RWA stack, record the valuation agent's SVI report hash
-#   2) approver (a DIFFERENT, human-held wallet): approve the agent proposal on-chain (four-eyes rule)
-#   3) deployer: execute only if approved — KYC, issue shares, anchor valuation + cap table, fund dividend round
-#   4) relayer: gasless claimFor for each shareholder
-#   5) publish web/monad-demo.json (Monad Metropolis demo data)
-# Keys: encrypted Foundry keystores (~/.foundry/keystores/blockid-{deployer,admin,relayer}); passwords in
-# ~/.blockid/*.password (mode 600). AI agents never touch these keys. Testnet only.
+#   1) deployer (issuer service): deploy share register + UpdateAnchor + BatchDividend, KYC + issue shares to N
+#      sample holder wallets, record the AI-drafted update (content hash + evidence confidence)        → Proposed
+#   2) director (a DIFFERENT, human-held wallet): approve the update on-chain                           → Anchored
+#   3) deployer: pay a pro-rata mAUD dividend to every holder in ONE transaction (refuses if not approved)
+#   4) publish site/monad-deploy.json for https://monad.blockid.au (addresses, tx hashes, gas used)
+# Keys: encrypted Foundry keystores (~/.foundry/keystores/blockid-{deployer,admin}); passwords in ~/.blockid/*.password.
+# AI agents never touch these keys. Testnet only. Re-runnable: finished steps are skipped.
+# Local dry run: anvil --port 8645 &  then  RPC=http://127.0.0.1:8645 CHAIN_ID=31337 LOCAL_KEYS=1 ANVIL_KEY0=.. ANVIL_KEY1=.. scripts/monad-demo.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 export PATH="$HOME/.foundry/bin:$PATH"
-RPC="${MONAD_RPC_URL:-https://testnet-rpc.monad.xyz}"
+RPC="${RPC:-${MONAD_RPC_URL:-https://testnet-rpc.monad.xyz}}"
+CHAIN_ID="${CHAIN_ID:-10143}"
 EXPLORER="${MONAD_EXPLORER:-https://testnet.monadexplorer.com}"
 KEYS="$HOME/.blockid"
-DEPLOYER=$(cat "$KEYS/deployer.address")
-APPROVER=$(cat "$KEYS/admin.address")
-RELAYER=$(cat "$KEYS/relayer.address")
-OUT="$ROOT/contracts/deployments/out/monad-demo.json"
-FIXTURE="$ROOT/contracts/test/fixtures/dividend_round.json"
-REPORT="$ROOT/contracts/deployments/params/hsk-svi-report.json"
+OUT="$ROOT/contracts/deployments/out/monad-passport.json"
 TXLOG="$ROOT/contracts/deployments/out/monad-txs.json"
+UPDATE="$ROOT/contracts/deployments/params/monad-update.json"
+SITE_JSON="$ROOT/site/monad-deploy.json"
 
-[[ $(cast chain-id --rpc-url "$RPC") == 10143 ]] || { echo "RPC is not Monad testnet"; exit 1; }
+if [[ -n ${LOCAL_KEYS:-} ]]; then   # anvil default accounts 0 and 1
+  DEP_ARGS=(--private-key "${ANVIL_KEY0:?set ANVIL_KEY0}"); DIR_ARGS=(--private-key "${ANVIL_KEY1:?set ANVIL_KEY1}")
+  DIRECTOR=$(cast wallet address "${ANVIL_KEY1}")
+  TXLOG="$ROOT/contracts/deployments/out/local-txs.json"
+  SITE_JSON="$ROOT/contracts/deployments/out/local-deploy.json"
+else
+  DEP_ARGS=(--account blockid-deployer --password-file "$KEYS/deployer.password")
+  DIR_ARGS=(--account blockid-admin --password-file "$KEYS/admin.password")
+  DIRECTOR=$(cat "$KEYS/admin.address")
+fi
+DEPLOYER=$(cast wallet address "${DEP_ARGS[@]}")
+
+[[ $(cast chain-id --rpc-url "$RPC") == "$CHAIN_ID" ]] || { echo "RPC is not chain $CHAIN_ID"; exit 1; }
 echo "== deployer $DEPLOYER balance: $(cast from-wei "$(cast balance "$DEPLOYER" --rpc-url "$RPC")") MON"
-# Top up the approver (1 tx) and relayer (3 txs) from the deployer so only the deployer needs the faucet.
-TOPUP="${MONAD_TOPUP:-0.1ether}"; MIN=$(cast to-wei 0.05)
-for W in "$APPROVER" "$RELAYER"; do
-  if [[ $(cast balance "$W" --rpc-url "$RPC") -lt $MIN ]]; then
-    cast send "$W" --value "$TOPUP" --rpc-url "$RPC" \
-      --account blockid-deployer --password-file "$KEYS/deployer.password" >/dev/null
-    echo "   topped up $W with $TOPUP"
-  fi
-done
-REPORT_HASH=$(cast keccak "$(cat "$REPORT")")
-echo "== SVI report hash (AI output provenance): $REPORT_HASH"
-[[ -f $TXLOG ]] || echo '{}' > "$TXLOG"
+UPDATE_HASH=$(cast keccak "$(cat "$UPDATE")")
+CONF=$(jq -r .evidence_confidence_bps "$UPDATE")
+echo "== update hash (AI-drafted shareholder update): $UPDATE_HASH  confidence ${CONF} bps"
+mkdir -p "$(dirname "$OUT")"; [[ -f $TXLOG ]] || echo '{}' > "$TXLOG"
 logtx() { jq --arg k "$1" --arg v "$2" '. + {($k): $v}' "$TXLOG" > "$TXLOG.tmp" && mv "$TXLOG.tmp" "$TXLOG"; }
 lasttx() { jq -r '[.transactions[] | select(.function != null and (.function | startswith($f)))] | last | .hash // empty' --arg f "$2" "$1"; }
+gasof() { cast receipt "$1" gasUsed --rpc-url "$RPC"; }
 
 cd "$ROOT/contracts"
-BCAST="broadcast/HskDemo.s.sol/10143"
-if [[ ! -f $OUT ]]; then
-  echo "== 1) propose: deploy + register agents + record SVI report hash"
+BCAST="broadcast/MonadPassport.s.sol/$CHAIN_ID"
+LOG="${TMPDIR:-/tmp}/monad-demo"
+if [[ ! -f $OUT || $(jq -r .chainId "$OUT") != "$CHAIN_ID" ]]; then
+  echo "== 1) deploy register, UpdateAnchor, BatchDividend; issue shares; record the AI-drafted update"
   forge test --offline >/dev/null && echo "   forge test: ok"
-  RELAYER="$RELAYER" APPROVER="$APPROVER" REPORT_HASH="$REPORT_HASH" DEMO_OUT=./deployments/out/monad-demo.json \
-    forge script script/HskDemo.s.sol:HskDemo --sig "propose()" --rpc-url "$RPC" --broadcast --slow \
-    --account blockid-deployer --password-file "$KEYS/deployer.password" > /tmp/monad-propose.log 2>&1 \
-    || { tail -20 /tmp/monad-propose.log; exit 3; }
-  grep -E 'AgentProvenance|proposal' /tmp/monad-propose.log || true
-  logtx propose "$(lasttx "$BCAST/propose-latest.json" 'propose(')"
+  DIRECTOR="$DIRECTOR" UPDATE_HASH="$UPDATE_HASH" UPDATE_CONFIDENCE_BPS="$CONF" \
+    forge script script/MonadPassport.s.sol:MonadPassport --sig "deploy()" --rpc-url "$RPC" --broadcast --slow \
+    "${DEP_ARGS[@]}" > "$LOG-deploy.log" 2>&1 || { tail -30 "$LOG-deploy.log"; exit 3; }
+  grep -E 'UpdateAnchor|BatchDividend' "$LOG-deploy.log" || true
+  logtx propose "$(lasttx "$BCAST/deploy-latest.json" 'propose(')"
 else
-  echo "== 1) already proposed ($OUT) — skipping"
+  echo "== 1) already deployed ($OUT) — skipping"
 fi
 
-PROV=$(jq -r .agentProvenance "$OUT"); ID=$(jq -r .proposalId "$OUT")
-STATUS=$(cast call "$PROV" "getProposal(uint256)((bytes32,string,bytes32,string,string,address,address,uint64,uint64,bytes32,uint8))" "$ID" --rpc-url "$RPC" | tr -d '()' | awk -F', ' '{print $NF}')
-if [[ $STATUS == 1 ]]; then
-  echo "== 2) human approver $APPROVER approves proposal $ID"
-  TX=$(cast send "$PROV" "approve(uint256)" "$ID" --rpc-url "$RPC" \
-        --account blockid-admin --password-file "$KEYS/admin.password" --json | jq -r .transactionHash)
+UA=$(jq -r .updateAnchor "$OUT"); ID=$(jq -r .updateId "$OUT")
+if [[ $(cast call "$UA" "verify(uint256,bytes32)(bool)" "$ID" "$UPDATE_HASH" --rpc-url "$RPC") != true ]]; then
+  echo "== 2) director $DIRECTOR approves update $ID"
+  TX=$(cast send "$UA" "approve(uint256)" "$ID" --rpc-url "$RPC" "${DIR_ARGS[@]}" --json | jq -r .transactionHash)
   logtx approve "$TX"; echo "   tx $TX"
 else
-  echo "== 2) proposal status $STATUS — approval already done"
+  echo "== 2) update $ID already anchored"
 fi
 
-if [[ $(cast call "$PROV" "getProposal(uint256)((bytes32,string,bytes32,string,string,address,address,uint64,uint64,bytes32,uint8))" "$ID" --rpc-url "$RPC" | tr -d '()' | awk -F', ' '{print $NF}') != 4 ]]; then
-  echo "== 3) execute (guarded by AgentProvenance.verify)"
-  DEMO_OUT=./deployments/out/monad-demo.json forge script script/HskDemo.s.sol:HskDemo --sig "execute()" --rpc-url "$RPC" --broadcast --slow \
-    --account blockid-deployer --password-file "$KEYS/deployer.password" > /tmp/monad-execute.log 2>&1 \
-    || { tail -20 /tmp/monad-execute.log; exit 4; }
-  grep -E 'executed' /tmp/monad-execute.log || true
-  logtx issue "$(lasttx "$BCAST/execute-latest.json" 'issue(')"
-  logtx anchorValuation "$(lasttx "$BCAST/execute-latest.json" 'anchorValuation(')"
-  logtx anchorCapTable "$(lasttx "$BCAST/execute-latest.json" 'anchor(')"
-  logtx createDividendRound "$(lasttx "$BCAST/execute-latest.json" 'createRound(')"
-  logtx execute "$(lasttx "$BCAST/execute-latest.json" 'markExecuted(')"
+BD=$(jq -r .batchDividend "$OUT")
+if [[ $(cast call "$BD" "roundCount()(uint256)" --rpc-url "$RPC") == 0 ]]; then
+  echo "== 3) one transaction pays every holder (guarded by UpdateAnchor.verify)"
+  forge script script/MonadPassport.s.sol:MonadPassport --sig "pay()" --rpc-url "$RPC" --broadcast --slow \
+    "${DEP_ARGS[@]}" > "$LOG-pay.log" 2>&1 || { tail -30 "$LOG-pay.log"; exit 4; }
+  grep -E 'paid round' "$LOG-pay.log" || true
+  logtx distribute "$(lasttx "$BCAST/pay-latest.json" 'distribute(')"
 else
-  echo "== 3) already executed"
+  echo "== 3) dividend round already paid"
 fi
 
-DIST=$(jq -r .dividendDistributor "$OUT")
-echo "== 4) relayer $RELAYER submits gasless claimFor for each shareholder"
-for i in 0 1 2; do
-  ACC=$(jq -r ".holders[$i].account" "$FIXTURE"); AMT=$(jq -r ".holders[$i].amount" "$FIXTURE")
-  PROOF="[$(jq -r ".holders[$i].proof | join(\",\")" "$FIXTURE")]"
-  if [[ $(cast call "$DIST" "hasClaimed(uint256,address)(bool)" 0 "$ACC" --rpc-url "$RPC") == true ]]; then
-    echo "   $ACC already claimed"; continue
-  fi
-  TX=$(cast send "$DIST" "claimFor(uint256,address,uint256,bytes32[])" 0 "$ACC" "$AMT" "$PROOF" \
-        --rpc-url "$RPC" --account blockid-relayer --password-file "$KEYS/relayer.password" --json | jq -r .transactionHash)
-  logtx "claim$i" "$TX"; echo "   $ACC  +$AMT mAUD-units  tx $TX"
-done
-
-echo "== 5) publish web/monad-demo.json"
-jq -s --arg exp "$EXPLORER" --arg id "$ID" '
-  .[0] + {
-    explorer: $exp, roundId: 0,
-    holders: [.[1].holders[] | {account, amount}], merkleRoot: .[1].root, dividendTotal: .[1].total,
-    capTableRoot: .[3].root,
-    shares: [.[3].claims | to_entries[] | {account: .key, shares: .value.amount}],
-    txs: .[2],
-    provenance: [{id: ($id|tonumber), agent: "valuation", kind: "svi_report", contentHash: .[0].reportHash,
-                  modelId: "claude-opus-5-5", status: "Executed",
-                  proposeTx: .[2].propose, approveTx: .[2].approve, executeTx: .[2].execute}]
-  }' "$OUT" "$FIXTURE" "$TXLOG" "$ROOT/contracts/deployments/params/hsk-captable.json" > "$ROOT/web/monad-demo.json"
-chmod 644 "$ROOT/web/monad-demo.json"
-echo "done → https://eth.blockid.au/monad-demo.json"
+echo "== 4) publish $SITE_JSON"
+DIST_TX=$(jq -r .distribute "$TXLOG")
+TOKEN=$(jq -r .payToken "$OUT")
+jq -n --slurpfile o "$OUT" --slurpfile t "$TXLOG" --slurpfile u "$UPDATE" \
+  --arg exp "$EXPLORER" --arg rpc "$RPC" --arg gasDist "$(gasof "$DIST_TX")" --arg gasApprove "$(gasof "$(jq -r .approve "$TXLOG")")" \
+  --arg at "$(date -u +%Y-%m-%dT%H:%MZ)" '
+  $o[0] + {explorer: $exp, rpc: $rpc, publishedAt: $at, txs: $t[0], update: $u[0],
+           gas: {distribute: ($gasDist|tonumber), approve: ($gasApprove|tonumber)}}' > "$SITE_JSON.tmp"
+# per-holder balances after the payout, read from chain
+jq -r '.holders[]' "$OUT" | while read -r H; do
+  printf '{"account":"%s","shares":%s,"paid":%s}\n' "$H" \
+    "$(cast call "$(jq -r .shareToken "$OUT")" "balanceOf(address)(uint256)" "$H" --rpc-url "$RPC" | awk '{print $1}')" \
+    "$(cast call "$TOKEN" "balanceOf(address)(uint256)" "$H" --rpc-url "$RPC" | awk '{print $1}')"
+done | jq -s . > "$SITE_JSON.holders"
+jq --slurpfile h "$SITE_JSON.holders" '. + {holderBalances: $h[0]}' "$SITE_JSON.tmp" > "$SITE_JSON"
+rm -f "$SITE_JSON.tmp" "$SITE_JSON.holders"; chmod 644 "$SITE_JSON"
+echo "done → $(jq -r .gas.distribute "$SITE_JSON") gas for $(jq '.holders|length' "$SITE_JSON") holders in one transaction"

@@ -1,0 +1,18 @@
+{
+  "company": "Demo Startup Pty Ltd (DEM) — sample company, not a customer",
+  "period": "2026-09",
+  "drafted_by": "BlockID analysis pipeline (connected data: Stripe, Xero, GA4, GitHub — test data)",
+  "summary": "September: revenue up, two releases shipped, one partnership not yet evidenced.",
+  "claims": [
+    {"claim": "Revenue A$41,200 in September, up 30% on August", "status": "evidenced", "source": "Stripe + Xero (test data)"},
+    {"claim": "Gross margin 71%", "status": "evidenced", "source": "Xero P&L (test data)"},
+    {"claim": "Monthly active users 3,940", "status": "evidenced", "source": "GA4 (test data)"},
+    {"claim": "Two product releases shipped", "status": "evidenced", "source": "GitHub releases"},
+    {"claim": "Cash runway 14 months", "status": "evidenced", "source": "Xero balance sheet (test data)"},
+    {"claim": "Letter of intent signed with a national retailer", "status": "missing", "source": null}
+  ],
+  "evidence_confidence_bps": 8200,
+  "fair_value_range_aud": [3100000, 3600000],
+  "dividend": {"declared_units": 1000000000, "token": "mAUD (6 decimals, testnet)", "basis": "pro-rata to the share register"},
+  "legal": "Testnet demo. Not an offer of securities or financial advice."
+}
