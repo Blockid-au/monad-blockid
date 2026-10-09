@@ -29,7 +29,25 @@ wallet in one transaction.
   one transaction. Holders must be strictly ascending (no duplicates) and their balances must add up to total supply
   (nobody left out). Dust goes back to the payer. Each holder gets a `DividendPaid` event.
 
-## Benchmark
+## Live on Monad testnet (deployed 8 Oct 2026)
+
+| Contract / step | Address or transaction |
+|---|---|
+| ShareRegister · BlockIDShareToken | [0xf3156Ad6eA559096D4aF350b39984408c764698E](https://testnet.monadexplorer.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
+| IdentityRegistry | [0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84](https://testnet.monadexplorer.com/address/0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84) |
+| UpdateAnchor | [0x112C26D5f5d602293f1a00029f5E375763e70282](https://testnet.monadexplorer.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
+| BatchDividend | [0x8cbA8cda3E564A7B0866291061925e7B71f36252](https://testnet.monadexplorer.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
+| mAUD (testnet stablecoin) | [0xC25d1C243530EB34708923F0D5E34C22386bB264](https://testnet.monadexplorer.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
+| 1 · AI-drafted update recorded | [0xc3e77ac0a0400a4d…](https://testnet.monadexplorer.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
+| 2 · Director approves (54,157 gas) | [0xc71205cc56044386…](https://testnet.monadexplorer.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
+| 3 · Dividend to 20 holders, one transaction (1,494,099 gas) | [0xc4b28168800b675a…](https://testnet.monadexplorer.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
+
+On Monad, the 20-holder payout was charged 1,494,099 gas at 105 gwei: 0.157 MON, about US$0.004. Monad charges the
+gas limit and prices cold state access higher than Ethereum, so Monad costs are quoted from this measured transaction.
+Extrapolated, 200 holders cost about 14.9M gas, about US$0.04, and about 400 holders fit in one 30M-gas transaction.
+The whole run (deploy, issue, propose, approve, pay) cost about 1.46 MON.
+
+## Benchmark (EVM gas, Foundry)
 
 `cd contracts && forge test --match-test bench -vv`
 
@@ -42,9 +60,8 @@ wallet in one transaction.
 For comparison, Merkle `claimFor` has a median of 91,765 gas per holder, plus 21,000 base gas per transaction. For
 200 holders that is ≈ 22.6M gas over 200 transactions.
 
-Prices on 8 Oct 2026, 23:43 UTC: Monad 102 gwei and MON US$0.0241; Ethereum 0.158 gwei and ETH US$2,476. At those
-prices a 200-holder batch costs ≈ US$0.016 on Monad and ≈ US$2.56 on Ethereum L1. Monad charges the gas limit,
-not the gas used.
+Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batch costs ≈ US$2.56 on L1, or
+≈ US$160 at 10 gwei.
 
 ## Monad testnet deploy
 
@@ -78,7 +95,7 @@ Tested on 8 Oct 2026: 20 holders paid in one transaction (847,344 gas), approval
 - [x] End-to-end flow on a local chain
 - [x] monad.blockid.au: pitch site (EN/VI), in-browser verification against Monad, live deploy data, deck, submission
       pack
-- [ ] Contracts deployed to Monad testnet (waiting for testnet MON)
+- [x] Contracts deployed to Monad testnet, with the full flow run on chain (see the table above)
 - [ ] Demo video (≤ 3 min; script on the submission page)
 - [ ] Passkey sign-in screen for directors in the BlockID app
 

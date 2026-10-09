@@ -140,20 +140,22 @@
 <!-- 6 -->
 <section class="slide">
   <p class="kick">Why Monad</p>
-  <h2>A 200-holder dividend for <em>under 2 cents</em>.</h2>
+  <h2>Every holder paid, in one transaction,<br>for <em>under a cent</em>.</h2>
   <table>
-    <thead><tr><th>200-holder dividend</th><th class="r">Gas</th><th class="r">Txs</th><th class="r">Monad</th><th class="r">Ethereum L1</th></tr></thead>
+    <thead><tr><th>Dividend run</th><th class="r">Gas</th><th class="r">Txs</th><th class="r">Cost</th></tr></thead>
     <tbody>
-      <tr class="hl"><td><code>BatchDividend</code> (push, new)</td><td class="r">6.56M</td><td class="r">1</td><td class="r">≈ $0.016</td><td class="r">≈ $2.56</td></tr>
-      <tr><td><code>DividendDistributor</code> (Merkle claims)</td><td class="r">≈ 22.6M</td><td class="r">200</td><td class="r">≈ $0.055</td><td class="r">≈ $8.81</td></tr>
+      <tr class="hl"><td>20 holders · Monad testnet · measured</td><td class="r">1.49M</td><td class="r">1</td><td class="r">0.157 MON ≈ $0.004</td></tr>
+      <tr><td>200 holders · Monad · extrapolated</td><td class="r">≈ 14.9M</td><td class="r">1</td><td class="r">≈ $0.04</td></tr>
+      <tr><td>200 holders · Ethereum L1 · EVM gas</td><td class="r">6.56M</td><td class="r">1</td><td class="r">≈ $2.56 · $160 at 10 gwei</td></tr>
+      <tr><td>200 holders · Merkle claims · EVM gas</td><td class="r">≈ 22.6M</td><td class="r">200</td><td class="r">—</td></tr>
     </tbody>
   </table>
-  <div class="row c3" style="margin-top:24px">
-    <div class="card"><h3>Flat cost</h3><p>Cents per run at 20 or 500 holders.</p></div>
-    <div class="card"><h3>Room in the block</h3><p>500 holders ≈ 16M gas: one tx in a 150M-gas block.</p></div>
+  <div class="row c3" style="margin-top:22px">
+    <div class="card"><h3>Cents, not dollars</h3><p>Monthly payouts are affordable for small companies.</p></div>
+    <div class="card"><h3>~400 holders per tx</h3><p>30M gas per tx; 150M-gas blocks fit many companies.</p></div>
     <div class="card"><h3>Fast finality</h3><p>Payout confirmed while the director is still on the screen.</p></div>
   </div>
-  <div class="foot"><span>Foundry benchmark · gas &amp; prices read 8 Oct 2026 (Monad 102 gwei, MON $0.0241; ETH 0.158 gwei, $2,476). At 10 gwei, L1 batch ≈ $160.</span><span>6</span></div>
+  <div class="foot"><span>Monad charges the gas limit; cost from the tx charged on testnet (105 gwei, MON $0.0241). EVM gas via Foundry; ETH $2,476 at 0.158 gwei. 8 Oct 2026.</span><span>6</span></div>
 </section>
 
 <!-- 7 -->
@@ -181,7 +183,7 @@
         <li>15 new tests (52 total) + gas benchmark</li>
         <li>Deploy script: propose → approve → pay → publish</li>
         <li>monad.blockid.au with in-browser verification</li>
-        <li class="todo" id="deck-deploy">Live on Monad testnet</li>
+        <li id="deck-deploy">Live on Monad testnet: deploy, director approval, one-tx dividend to 20 holders</li>
       </ul>
     </div>
     <div class="card">
