@@ -24,15 +24,52 @@ paid straight to their wallet.
 | Live app | https://eth.blockid.au |
 | Verify any company (browser-side hash check) | https://eth.blockid.au/verify/EBA |
 | BlockID EVM explorer (Blockscout) | https://scan.blockid.au |
-| HashKey Chain page | https://eth.blockid.au/hsk |
-| Monad Metropolis 2026 (Track 4) | [docs/MONAD.md](docs/MONAD.md) · branch `monad` · Monad testnet (chain 10143) |
+| **Monad Metropolis 2026 (Track 4)** | https://monad.blockid.au · [docs/MONAD.md](docs/MONAD.md) · branch `monad` · Monad testnet (chain 10143) |
+| Monad deck · submission pack | https://monad.blockid.au/deck/ · https://monad.blockid.au/submission.html |
 | Pitch deck (3 min) | [PDF](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pdf) · [PPTX](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pptx) |
 | Video | Demo, 3 min: https://eth.blockid.au/deck/blockid-business-passport-demo-3min-captions.mp4 · full demo, 5:15: https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4 · pitch (slides), 3 min: https://eth.blockid.au/deck/blockid-business-passport-3min-captions.mp4 |
 | Hackathon write-up · demo script | [docs/HACKATHON.md](docs/HACKATHON.md) · [docs/DEMO.md](docs/DEMO.md) |
 
 > **Testnet demo. Not an offer of securities.**
 
-## Results (testnet, 27 Sep 2026)
+## Monad Metropolis 2026 — Track 4: Trust, Identity & AI Infrastructure
+
+Built on branch `monad` during the hackathon window (from 8 Oct 2026). Everything below this section existed before
+and is listed as prior work.
+
+- **UpdateAnchor** ([UpdateAnchor.sol](contracts/src/UpdateAnchor.sol)): the issuer service records an AI-drafted
+  shareholder update (content hash, evidence confidence, evidenced / missing claim counts). Only a director of that
+  company can approve it — directly or by an EIP-712 signature checked with `SignatureChecker`, so ERC-1271 smart
+  accounts (passkey / P256) work. The recorder can never approve its own draft; `verify(id, hash)` is true only for
+  approved, unchanged content.
+- **BatchDividend** ([BatchDividend.sol](contracts/src/BatchDividend.sol)): pays every holder pro-rata in **one
+  transaction**, and refuses unless the update behind the payout is approved. Holders must be strictly ascending and
+  cover the whole supply, so nobody can be left out.
+
+Live on Monad testnet (chain 10143), deployed 2026-10-08 by [scripts/monad-demo.sh](scripts/monad-demo.sh):
+
+| Contract / step | Address or transaction |
+|---|---|
+| UpdateAnchor | [`0x112C26D5f5d602293f1a00029f5E375763e70282`](https://testnet.monadvision.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
+| BatchDividend | [`0x8cbA8cda3E564A7B0866291061925e7B71f36252`](https://testnet.monadvision.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
+| Share register (BlockIDShareToken) | [`0xf3156Ad6eA559096D4aF350b39984408c764698E`](https://testnet.monadvision.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
+| mAUD (testnet stablecoin) | [`0xC25d1C243530EB34708923F0D5E34C22386bB264`](https://testnet.monadvision.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
+| 1 · AI-drafted update recorded | [`0xc3e77ac0…`](https://testnet.monadvision.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
+| 2 · Director approves (54,157 gas) | [`0xc71205cc…`](https://testnet.monadvision.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
+| 3 · Dividend to 20 holders in one transaction (1,494,099 gas) | [`0xc4b28168…`](https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
+
+Gas benchmark (Foundry): 200 holders = 6.56M gas in one transaction (32.8k per holder), versus ≈ 22.6M gas over 200
+separate Merkle `claimFor` transactions. Holders are generated sample wallets, not customers. Details, run steps and
+the pre-existing / new split: [docs/MONAD.md](docs/MONAD.md).
+
+```bash
+scripts/monad-demo.sh   # deploy → record update → director approves → one-transaction dividend → site/monad-deploy.json
+```
+
+**AI tools disclosure.** Code, docs and the pitch site were written with Claude Code (Anthropic) under human review.
+AI agents in the product never hold keys: they draft updates, and a human wallet must approve on-chain.
+
+## Results (testnet, 27 Sep 2026, before the Monad build)
 
 > **About the data:** the listed companies are **sample listings** built from public information (e.g. Canva,
 > Airwallex) to run the full flow on testnet. They are not customers or partners, and their holders, updates and
@@ -54,7 +91,7 @@ on-chain: [docs/DEPLOYMENTS.md](docs/DEPLOYMENTS.md). Platform contracts: `CapTa
 [HashKey](https://testnet-explorer.hskchain.net/address/0x728c834DE493DC3e9Ae2f7C0e79d86701B6F9F04),
 `AgentProvenance` on [HashKey](https://testnet-explorer.hskchain.net/address/0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84).
 
-## Hackathon tracks (EAG Global Buildathon, Sydney)
+## Prior work: EAG Global Buildathon, Sydney (26 Sep 2026)
 
 1. **Sydney Hackathon — AI x Ethereum & Agent Economy.** Agent identity, permissioned agent execution, safe
    execution policies and AI-generated content provenance: agents hold no keys, their permissions are enforced in
@@ -67,7 +104,8 @@ on-chain: [docs/DEPLOYMENTS.md](docs/DEPLOYMENTS.md). Platform contracts: `CapTa
    style), identity registry, Merkle dividend distributor with gasless claims, cap-table anchor and
    `AgentProvenance` — is deployed there by `scripts/hsk-demo.sh`.
 
-See [docs/HACKATHON.md](docs/HACKATHON.md) for how the build maps to each judging criterion.
+HashKey Chain page from that build: https://eth.blockid.au/hsk. See [docs/HACKATHON.md](docs/HACKATHON.md) for how that
+build maps to its judging criteria.
 
 ![The problem it solves](docs/images/problem.png)
 
@@ -196,6 +234,7 @@ Detailed diagrams (rendered from Mermaid, sources in [`docs/diagrams/`](docs/dia
                     │ BlockID EVM 262626   IdentityRegistry · ShareToken ·         │
                     │ (zero gas)           DividendDistributor · DemoAUD           │
                     │ Ethereum Hoodi       CapTableAnchor + paused mirror tokens   │
+                    │ Monad testnet 10143  UpdateAnchor + BatchDividend            │
                     │ HashKey testnet 133  full RWA stack + AgentProvenance        │
                     └─────────────────────────────────────────────────────────────┘
 ```
@@ -209,7 +248,8 @@ More detail: [docs/HACKATHON.md](docs/HACKATHON.md), [docs/ARCHITECTURE.md](docs
 |---|---|---|---|
 | BlockID EVM (Cosmos EVM, gas price 0) | 262626 | Operational share register: issue, mint, dividends, KYC | https://scan.blockid.au |
 | Ethereum Hoodi testnet | 560048 | Public anchor: `CapTableAnchor` Merkle roots + paused mirror tokens | https://hoodi.etherscan.io |
-| HashKey Chain testnet | 133 | Paused mirror tokens + `CapTableAnchor` roots; full RWA stack + `AgentProvenance` | https://testnet-explorer.hskchain.net |
+| **Monad testnet** | 10143 | `UpdateAnchor` (director-approved AI updates) + `BatchDividend` (one-transaction payouts) — Monad Metropolis | https://testnet.monadvision.com |
+| HashKey Chain testnet (prior work) | 133 | Paused mirror tokens + `CapTableAnchor` roots; full RWA stack + `AgentProvenance` | https://testnet-explorer.hskchain.net |
 
 Existing deployments:
 
@@ -308,7 +348,14 @@ make demo                        # offline legacy data-room flow: profile → re
 `make lint` (ruff), `make svi PROFILE=examples/agritrace.json` (live valuation; needs API keys in `.env`, see
 `.env.example`).
 
-### Deploy the demo on HashKey Chain testnet
+### Deploy the demo on Monad testnet
+
+```bash
+# needs testnet MON on the deployer keystore (faucet: https://faucet.monad.xyz); the script tops up the director wallet
+scripts/monad-demo.sh        # chain 10143: deploy, record, approve, pay; writes site/monad-deploy.json
+```
+
+### Deploy the earlier demo on HashKey Chain testnet
 
 ```bash
 # needs testnet HSK on the deployer and relayer keystores (encrypted Foundry keystores, never plaintext keys)
