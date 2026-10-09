@@ -16,7 +16,11 @@ import {BatchDividend} from "../src/BatchDividend.sol";
 ///         DEMO ONLY: the deployer plays issuer Safe, KYC agent and recorder (production: Safe multisig).
 ///         Holder wallets are generated sample addresses (no keys); this is sample data, not customers.
 contract MonadPassport is Script {
-    string constant OUT = "./deployments/out/monad-passport.json";
+    /// Output path (relative to contracts/). scripts/monad-demo.sh points a deploy at a .pending file and only moves it
+    /// into place after the broadcast succeeds, and keeps local dry runs in a separate file.
+    function _out() internal view returns (string memory) {
+        return vm.envOr("PASSPORT_OUT", string("./deployments/out/monad-passport.json"));
+    }
     bytes32 constant COMPANY = keccak256("DEM");
 
     struct Deployed {
@@ -95,11 +99,11 @@ contract MonadPassport is Script {
         vm.serializeBytes32(o, "updateHash", updateHash);
         vm.serializeUint(o, "updateConfidenceBps", confidence);
         vm.serializeAddress(o, "holders", holders);
-        vm.writeJson(vm.serializeUint(o, "updateId", d.updateId), OUT);
+        vm.writeJson(vm.serializeUint(o, "updateId", d.updateId), _out());
     }
 
     function pay() external {
-        string memory d = vm.readFile(OUT);
+        string memory d = vm.readFile(_out());
         UpdateAnchor ua = UpdateAnchor(vm.parseJsonAddress(d, ".updateAnchor"));
         BatchDividend bd = BatchDividend(vm.parseJsonAddress(d, ".batchDividend"));
         DemoAUD aud = DemoAUD(vm.parseJsonAddress(d, ".payToken"));

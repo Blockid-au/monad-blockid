@@ -43,8 +43,9 @@ and is listed as prior work.
   accounts (passkey / P256) work. The recorder can never approve its own draft; `verify(id, hash)` is true only for
   approved, unchanged content.
 - **BatchDividend** ([BatchDividend.sol](contracts/src/BatchDividend.sol)): pays every holder pro-rata in **one
-  transaction**, and refuses unless the update behind the payout is approved. Holders must be strictly ascending and
-  cover the whole supply, so nobody can be left out.
+  transaction**. Holders must be strictly ascending and cover the whole supply, so nobody can be left out. In this
+  testnet build the deploy script checks `UpdateAnchor.verify` before it pays; making `distribute()` itself require an
+  approved update is the next contract change (see Known limitations below).
 
 Live on Monad testnet (chain 10143), deployed 2026-10-08 by [scripts/monad-demo.sh](scripts/monad-demo.sh):
 
@@ -65,6 +66,11 @@ the pre-existing / new split: [docs/MONAD.md](docs/MONAD.md).
 ```bash
 scripts/monad-demo.sh   # deploy → record update → director approves → one-transaction dividend → site/monad-deploy.json
 ```
+
+**Known limitations (testnet build, from our own review).** The approval check before a payout runs in the deploy
+script, not inside `BatchDividend`; an issuer key can still call `distribute()` directly. Four-eyes stops the
+recording address from approving its own draft, but the contract admin must be a separate multisig for that to mean
+two people. One holder whose transfer reverts (for example a blacklisted stablecoin address) blocks the whole round.
 
 **AI tools disclosure.** Code, docs and the pitch site were written with Claude Code (Anthropic) under human review.
 AI agents in the product never hold keys: they draft updates, and a human wallet must approve on-chain.
