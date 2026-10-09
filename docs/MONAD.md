@@ -33,14 +33,14 @@ wallet in one transaction.
 
 | Contract / step | Address or transaction |
 |---|---|
-| ShareRegister · BlockIDShareToken | [0xf3156Ad6eA559096D4aF350b39984408c764698E](https://testnet.monadexplorer.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
-| IdentityRegistry | [0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84](https://testnet.monadexplorer.com/address/0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84) |
-| UpdateAnchor | [0x112C26D5f5d602293f1a00029f5E375763e70282](https://testnet.monadexplorer.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
-| BatchDividend | [0x8cbA8cda3E564A7B0866291061925e7B71f36252](https://testnet.monadexplorer.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
-| mAUD (testnet stablecoin) | [0xC25d1C243530EB34708923F0D5E34C22386bB264](https://testnet.monadexplorer.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
-| 1 · AI-drafted update recorded | [0xc3e77ac0a0400a4d…](https://testnet.monadexplorer.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
-| 2 · Director approves (54,157 gas) | [0xc71205cc56044386…](https://testnet.monadexplorer.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
-| 3 · Dividend to 20 holders, one transaction (1,494,099 gas) | [0xc4b28168800b675a…](https://testnet.monadexplorer.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
+| ShareRegister · BlockIDShareToken | [0xf3156Ad6eA559096D4aF350b39984408c764698E](https://testnet.monadvision.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
+| IdentityRegistry | [0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84](https://testnet.monadvision.com/address/0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84) |
+| UpdateAnchor | [0x112C26D5f5d602293f1a00029f5E375763e70282](https://testnet.monadvision.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
+| BatchDividend | [0x8cbA8cda3E564A7B0866291061925e7B71f36252](https://testnet.monadvision.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
+| mAUD (testnet stablecoin) | [0xC25d1C243530EB34708923F0D5E34C22386bB264](https://testnet.monadvision.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
+| 1 · AI-drafted update recorded | [0xc3e77ac0a0400a4d…](https://testnet.monadvision.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
+| 2 · Director approves (54,157 gas) | [0xc71205cc56044386…](https://testnet.monadvision.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
+| 3 · Dividend to 20 holders, one transaction (1,494,099 gas) | [0xc4b28168800b675a…](https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
 
 On Monad, the 20-holder payout was charged 1,494,099 gas at 105 gwei: 0.157 MON, about US$0.004. Monad charges the
 gas limit and prices cold state access higher than Ethereum, so Monad costs are quoted from this measured transaction.
@@ -69,7 +69,7 @@ Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batc
 |---|---|
 | Chain id | 10143 |
 | RPC | https://testnet-rpc.monad.xyz (`monad_testnet` in [foundry.toml](../contracts/foundry.toml)) |
-| Explorer | https://testnet.monadexplorer.com |
+| Explorer | https://testnet.monadvision.com |
 | Deployer / recorder | `0x2567Bb502ac840cF93957C60A410160a8cCb5ddf` (needs ≈ 2 MON) |
 | Director (approver) | `0xC40052702B48631C26AD7c88b499bF230faCa21F` (the script tops it up) |
 

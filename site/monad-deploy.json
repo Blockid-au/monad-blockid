@@ -32,7 +32,7 @@
   "updateConfidenceBps": 8200,
   "updateHash": "0x97caf07108ade94caa2000ef77940c623512bdb77bd6c6fb00a89e98dbf67a34",
   "updateId": 0,
-  "explorer": "https://testnet.monadexplorer.com",
+  "explorer": "https://testnet.monadvision.com",
   "rpc": "https://testnet-rpc.monad.xyz",
   "publishedAt": "2026-10-08T23:58Z",
   "txs": {

@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   const RPC = "https://testnet-rpc.monad.xyz";
-  const EXPLORER = "https://testnet.monadexplorer.com";
+  const EXPLORER = "https://testnet.monadvision.com";
   const SEL = { verify: "0x1d97ce31", roundCount: "0x127f0b3f", balanceOf: "0x70a08231" };
 
   // ------------------------------------------------------------------ Vietnamese copy (EN is in the HTML)

@@ -25,7 +25,7 @@
 <main class="wrap" style="padding-top:32px;padding-bottom:40px">
   <p class="eyebrow">Monad Metropolis 2026 · submission pack</p>
   <h2>Copy-ready fields</h2>
-  <p class="sub">Every field below matches the code on branch <code>monad</code>. Contract addresses fill in automatically once <code>scripts/monad-demo.sh</code> has published <code>monad-deploy.json</code>.</p>
+  <p class="sub">Every field below matches the code on branch <code>monad</code>. Contract addresses are read from <code>monad-deploy.json</code>, published by <code>scripts/monad-demo.sh</code> after the testnet deploy.</p>
 
   <div class="field"><label>Project name <button class="copy">Copy</button></label><div class="box">BlockID Business Passport on Monad</div></div>
 
@@ -38,8 +38,8 @@
 Business Passport turns a company's register and reporting into a trust primitive on Monad:
 
 • ShareRegister — a permissioned ERC-20 per share class (BlockIDShareToken + IdentityRegistry). Only verified wallets can hold shares; it mirrors the company's legal register as proof of ownership, not a token sale.
-• UpdateAnchor (new) — BlockID's analysis pipeline drafts the monthly update from the company's own data and marks every claim evidenced or missing, with an evidence-confidence score. The issuer service records the draft; it is anchored only when a director of that company approves it. Directors sign with EIP-712, checked through ERC-1271, so passkey (P256 / WebAuthn) smart accounts work without a seed phrase. The recorder can never approve its own draft.
-• BatchDividend (new) — one director-declared transaction pays a stablecoin dividend pro-rata to every holder. The contract checks on-chain that the holder list is complete and duplicate-free against total supply, and it pays only after the update declaring the dividend is director-approved.
+• UpdateAnchor (new) — BlockID's analysis pipeline drafts the monthly update from the company's own data and marks every claim evidenced or missing, with an evidence-confidence score. The issuer service records the draft; it is anchored only when a director of that company approves it. A director approves directly or with an EIP-712 signature; smart-account signatures are checked through ERC-1271, so passkey (P256 / WebAuthn) accounts work without a seed phrase. The recorder can never approve its own draft.
+• BatchDividend (new) — one director-declared transaction pays a stablecoin dividend pro-rata to every holder. The contract checks on-chain that the holder list is complete and duplicate-free against total supply. In this build the demo script pays only after the update declaring the dividend is director-approved; moving that check into the contract is the next change.
 
 Why Monad: on Monad testnet our deployed BatchDividend paid 20 holders in one transaction for 1.49M gas — 0.157 MON, about US$0.004. Extrapolated, 200 holders cost about US$0.04 in a single transaction, versus 200 separate claim transactions with a Merkle distributor, or about US$160 on Ethereum L1 at 10 gwei. About 400 holders fit in one transaction, and sub-second blocks let the director see the payout confirmed on the approval screen.
 
@@ -61,7 +61,8 @@ Pre-existing foundation (disclosed): built in September 2026 and first shown at 
 Live site: https://monad.blockid.au
 Deck: https://monad.blockid.au/deck/ · PDF https://monad.blockid.au/deck/BlockID-Business-Passport-Monad.pdf
 Network: Monad testnet (chain id 10143)
-Contracts: <span id="addr">pending testnet deploy</span>
+Contracts: <span id="addr">see https://monad.blockid.au/monad-deploy.json</span>
+Explorer: https://testnet.monadvision.com · dividend to 20 holders: https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430
 Demo video: [add after recording]</div></div>
 
   <div class="field"><label>Team <button class="copy">Copy</button></label><div class="box">Do Van Long — co-founder &amp; CEO; founder of Vietnam Blockchain Corporation (2016) and Auschain Pty Ltd (Sydney); former CTO. https://au.linkedin.com/in/dovanlong
@@ -76,8 +77,8 @@ Contact: admin@blockid.au</div></div>
       <tr><td>0:20</td><td>Explorer: share token, 20 holders</td><td>"Business Passport keeps the share register on Monad. Only verified wallets can hold shares."</td></tr>
       <tr><td>0:45</td><td>Update card: evidenced / missing, 82%</td><td>"Our pipeline drafts the monthly update from the company's data and marks every claim evidenced or missing. The draft is recorded on Monad, but it isn't final."</td></tr>
       <tr><td>1:10</td><td>Director approve tx, <code>UpdateAnchored</code> event</td><td>"Only a director can approve it, from a different wallet, or a passkey smart account. The AI never holds a key."</td></tr>
-      <tr><td>1:35</td><td>Dividend tx: 20 transfers in one transaction, gas</td><td>"Now the dividend: one transaction pays every holder pro-rata. The contract refuses if anyone is left out, or if the update wasn't approved."</td></tr>
-      <tr><td>2:00</td><td>Verify button → PASS; benchmark table</td><td>"Anyone can check it without trusting us. And on Monad a 200-holder payout costs under two cents."</td></tr>
+      <tr><td>1:35</td><td>Dividend tx: 20 transfers in one transaction, gas</td><td>"Now the dividend: one transaction pays every holder pro-rata. The contract refuses if anyone is left out, and the payout only runs once the update is approved."</td></tr>
+      <tr><td>2:00</td><td>Verify button → PASS; benchmark table</td><td>"Anyone can check it without trusting us. And on Monad a 200-holder payout costs about four cents."</td></tr>
       <tr><td>2:20</td><td>Title slide</td><td>"Business Passport: know the business you own. Built on Monad."</td></tr>
     </tbody>
   </table></div>
