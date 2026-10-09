@@ -1,0 +1,151 @@
+1
+00:00:00,550 --> 00:00:03,321
+BlockID Business Passport, on Monad.
+
+2
+00:00:03,321 --> 00:00:07,755
+Built for Track 4: trust, identity and AI infrastructure.
+
+3
+00:00:08,622 --> 00:00:12,725
+If you own two percent of a private company, today you own a PDF.
+
+4
+00:00:12,725 --> 00:00:22,820
+Business Passport gives every shareholder a live share register on Monad, monthly updates drafted by AI and signed off by a director, and dividends paid to every wallet in one transaction.
+
+5
+00:00:23,678 --> 00:00:25,199
+Here is the flow.
+
+6
+00:00:25,199 --> 00:00:27,121
+The company connects its data.
+
+7
+00:00:27,121 --> 00:00:29,586
+Our AI pipeline drafts the update.
+
+8
+00:00:29,586 --> 00:00:32,097
+The issuer service records it on Monad.
+
+9
+00:00:32,097 --> 00:00:35,989
+A director approves it from a separate wallet, or a passkey smart account.
+
+10
+00:00:35,989 --> 00:00:39,291
+Only then does Monad anchor the update and pay the holders.
+
+11
+00:00:40,150 --> 00:00:43,499
+This is the update the AI drafted for a demo company.
+
+12
+00:00:43,499 --> 00:00:48,369
+Every claim is marked evidenced or missing, with an evidence confidence of eighty-two percent.
+
+13
+00:00:48,369 --> 00:00:52,626
+Its exact bytes are hashed and recorded on Monad, but it is not final yet.
+
+14
+00:00:53,478 --> 00:00:54,633
+Step two.
+
+15
+00:00:54,633 --> 00:00:57,180
+The director approves on Monad testnet.
+
+16
+00:00:57,180 --> 00:01:02,027
+This transaction comes from the director's wallet, not from the service that recorded the draft.
+
+17
+00:01:02,027 --> 00:01:07,982
+In fact, the contract never lets a recorder be a director, so the AI side can never sign off its own work.
+
+18
+00:01:08,846 --> 00:01:10,956
+Step three, the dividend.
+
+19
+00:01:10,956 --> 00:01:18,044
+One transaction pays all twenty holders pro-rata: one point six three million gas, about point one seven testnet MON.
+
+20
+00:01:18,044 --> 00:01:23,893
+Before any transfer, the contract checks the holder list covers the whole share supply, with no duplicates.
+
+21
+00:01:24,742 --> 00:01:26,298
+And here is the gate.
+
+22
+00:01:26,298 --> 00:01:30,838
+We recorded a second update and never approved it, then tried to pay against it.
+
+23
+00:01:30,838 --> 00:01:36,463
+BatchDividend asks UpdateAnchor itself, and the transaction reverts: update not approved.
+
+24
+00:01:36,463 --> 00:01:37,867
+No money moved.
+
+25
+00:01:38,718 --> 00:01:41,147
+Anyone can check this without trusting us.
+
+26
+00:01:41,147 --> 00:01:48,104
+The page downloads the update, hashes it in the browser, and asks Monad directly whether a director approved exactly that content.
+
+27
+00:01:48,104 --> 00:01:48,989
+Pass.
+
+28
+00:01:49,838 --> 00:01:51,017
+Why Monad?
+
+29
+00:01:51,017 --> 00:01:54,826
+Paying two hundred holders in one transaction costs about four cents.
+
+30
+00:01:54,826 --> 00:02:01,076
+On Ethereum the same payout is about a hundred and seventy dollars at ten gwei, or two hundred separate claim transactions.
+
+31
+00:02:01,076 --> 00:02:05,533
+And sub-second blocks mean the director sees the payout confirmed on the approval screen.
+
+32
+00:02:06,382 --> 00:02:13,799
+Everything you have seen is live on Monad testnet: the contracts, every transaction, and each holder's balance, read straight from the chain.
+
+33
+00:02:13,799 --> 00:02:15,804
+The holders are sample wallets.
+
+34
+00:02:15,804 --> 00:02:17,655
+There are no real users yet.
+
+35
+00:02:18,510 --> 00:02:19,960
+Business Passport.
+
+36
+00:02:19,960 --> 00:02:21,658
+Know the business you own.
+
+37
+00:02:21,658 --> 00:02:22,932
+Built on Monad.
+
+38
+00:02:22,932 --> 00:02:27,318
+The code, the contracts and this demo are at monad dot blockid dot au.

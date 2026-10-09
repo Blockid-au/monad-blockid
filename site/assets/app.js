@@ -43,7 +43,7 @@
     "w.r3": "200 cổ đông trên Ethereum L1, cùng hợp đồng (gas EVM)",
     "w.note": "Monad tính phí theo gas limit và định giá truy cập state lạnh cao hơn Ethereum, nên chi phí Monad lấy từ giao dịch thật trên Monad testnet (105 gwei). Gas EVM đo bằng Foundry (<code>forge test --match-test bench</code>). Giá ngày 8/10/2026: MON US$0,0241; ETH US$2.476 ở 0,158 gwei.",
     "w1.h": "Chi phí ổn định", "w1.t": "Dưới một cent cho 20 cổ đông, vài cent cho 200. Công ty nhỏ cũng trả hằng tháng và neo lại hằng tuần được.",
-    "w2.h": "Block rộng", "w2.t": "Khoảng 400 cổ đông vừa một giao dịch (30M gas mỗi giao dịch), block 150M gas chứa nhiều đợt trả của nhiều công ty. Sổ lớn hơn chia lô hoặc dùng Merkle.",
+    "w2.h": "Block rộng", "w2.t": "Khoảng 350 cổ đông vừa một giao dịch (30M gas mỗi giao dịch), block 150M gas chứa nhiều đợt trả của nhiều công ty. Sổ lớn hơn chia lô hoặc dùng Merkle.",
     "w3.h": "Xác nhận nhanh", "w3.t": "Block dưới một giây: giám đốc thấy khoản trả được xác nhận ngay trên màn hình phê duyệt, cổ đông thấy ngay sau đó.",
     "t.eyebrow": "Vì sao Track 4", "t.h2": "Lớp tin cậy cho những gì công ty nói về chính mình.",
     "t1.h": "Xác nhận AI có người gác", "t1.t": "Kết quả AI chỉ thành hồ sơ sau khi một giám đốc có tên ký. Người ghi không bao giờ tự duyệt bản nháp của mình (bốn mắt, cưỡng chế trên chain).",
@@ -67,7 +67,7 @@
     "tm1": "Đồng sáng lập & CEO. Sáng lập Vietnam Blockchain Corporation (2016) và Auschain Pty Ltd (Sydney). Cựu CTO; visa Global Talent Úc. <a href=\"https://au.linkedin.com/in/dovanlong\">LinkedIn</a>",
     "tm2": "Đồng sáng lập. Kinh nghiệm phía nhà đầu tư và thị trường vốn (Dragon Capital Group); University of Hawai'i Shidler College of Business. Sống tại Sydney. <a href=\"https://www.linkedin.com/in/tuantruong858/\">LinkedIn</a>",
     "k.eyebrow": "Liên kết", "k1": "Mã nguồn (MIT)", "k1b": "nhánh", "k2": "Pitch deck", "k3": "Video demo",
-    "k3t": "Video demo Monad: quay sau khi deploy testnet.", "k3l": "Video giới thiệu sản phẩm (trước Monad, 5 phút)",
+    "k3t": "Video demo Monad, 2:30 (phụ đề)", "k3l": "Video giới thiệu sản phẩm (trước Monad, 5 phút)",
     "k4": "App BlockID", "k5": "Liên hệ",
     "legal": "Bản demo testnet. Không phải chào bán chứng khoán hay tư vấn tài chính."
   };
@@ -142,6 +142,9 @@
       [t(`3 · Dividend to ${deploy.holders.length} holders, one transaction`, `3 · Cổ tức cho ${deploy.holders.length} cổ đông, một giao dịch`) +
         ` <span class="note">(${deploy.gas.distribute.toLocaleString()} gas)</span>`, link("tx", deploy.txs.distribute)]
     ];
+    if (deploy.txs.refusedUnapproved) rows.push([
+      t("4 · Payout against an unapproved update — reverted by the contract", "4 · Trả cổ tức theo bản chưa duyệt — contract từ chối") +
+        ` <span class="note">(UpdateNotApproved)</span>`, link("tx", deploy.txs.refusedUnapproved)]);
     document.getElementById("live-rows").innerHTML = rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
     document.getElementById("holder-rows").innerHTML = (deploy.holderBalances || []).map((h) =>
       `<tr><td>${link("address", h.account)}</td><td class="r">${Number(h.shares).toLocaleString()}</td><td class="r">${fmtUnits(h.paid, 6)}</td></tr>`).join("");

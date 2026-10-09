@@ -1,0 +1,12 @@
+1
+00:00:00,050 --> 00:00:02,479
+Anyone can check this without trusting us.
+
+2
+00:00:02,479 --> 00:00:09,436
+The page downloads the update, hashes it in the browser, and asks Monad directly whether a director approved exactly that content.
+
+3
+00:00:09,436 --> 00:00:10,321
+Pass.
+

@@ -1,5 +1,5 @@
 {
-  "batchDividend": "0x9575De573b8b75eB8Df5b2040D61957353fd9cd9",
+  "batchDividend": "0x8cbA8cda3E564A7B0866291061925e7B71f36252",
   "chainId": 10143,
   "director": "0xC40052702B48631C26AD7c88b499bF230faCa21F",
   "holders": [
@@ -24,23 +24,21 @@
     "0xdedf8609f293416355cAc27a12b0F03219F927E0",
     "0xfB327df40c7d4E0B40B8D48B51004e9cB0B4014E"
   ],
-  "identityRegistry": "0x47938329CF7Df5B28Dc5b2FEdb4cBE8357e2106F",
+  "identityRegistry": "0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84",
   "operator": "0x2567Bb502ac840cF93957C60A410160a8cCb5ddf",
-  "payToken": "0xF32BF09472A7C41857c5aF281cCbecc1e6631Ba7",
-  "shareToken": "0x05fa63890Fcafa445b33ADEaba088A77cbE51B22",
-  "updateAnchor": "0x43616f6cD253568e0112E6ffe73481bA715F04EA",
+  "payToken": "0xC25d1C243530EB34708923F0D5E34C22386bB264",
+  "shareToken": "0xf3156Ad6eA559096D4aF350b39984408c764698E",
+  "updateAnchor": "0x112C26D5f5d602293f1a00029f5E375763e70282",
   "updateConfidenceBps": 8200,
   "updateHash": "0x97caf07108ade94caa2000ef77940c623512bdb77bd6c6fb00a89e98dbf67a34",
   "updateId": 0,
   "explorer": "https://testnet.monadvision.com",
   "rpc": "https://testnet-rpc.monad.xyz",
-  "publishedAt": "2026-10-09T01:02Z",
+  "publishedAt": "2026-10-08T23:58Z",
   "txs": {
-    "propose": "0x9a23bd00fae6a0b3837968b5daadbdc4a57efb4d45918945c144d273354e6c90",
-    "approve": "0x35f1e1e46c1433486e9e1ea249c332e9c34de215a5d2cb8ba56f4c22cd01bb22",
-    "distribute": "0x15ebe321aedbb0f987596dab4c936f9e3c08c36465b4b7b6ffb454954968c5f2",
-    "proposeUnapproved": "0xe34ded8e662f3db4964f2935a7fb459399ce5017c6b66468b53c7ec2146bdb01",
-    "refusedUnapproved": "0xe719266cb99ed4f159f782a3cbf0b7afae213bfef51b7cbc301444087fc4946f"
+    "propose": "0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164",
+    "approve": "0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f",
+    "distribute": "0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430"
   },
   "update": {
     "company": "Demo Startup Pty Ltd (DEM) — sample company, not a customer",
@@ -92,8 +90,8 @@
     "legal": "Testnet demo. Not an offer of securities or financial advice."
   },
   "gas": {
-    "distribute": 1627025,
-    "approve": 62537
+    "distribute": 1494099,
+    "approve": 54157
   },
   "holderBalances": [
     {

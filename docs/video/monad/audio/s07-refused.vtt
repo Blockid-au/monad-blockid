@@ -1,0 +1,16 @@
+1
+00:00:00,050 --> 00:00:01,606
+And here is the gate.
+
+2
+00:00:01,606 --> 00:00:06,146
+We recorded a second update and never approved it, then tried to pay against it.
+
+3
+00:00:06,146 --> 00:00:11,771
+BatchDividend asks UpdateAnchor itself, and the transaction reverts: update not approved.
+
+4
+00:00:11,771 --> 00:00:13,175
+No money moved.
+

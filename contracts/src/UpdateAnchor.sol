@@ -12,11 +12,11 @@ import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/Signa
 ///         2) a director of that company approves, directly or with an EIP-712 signature relayed by anyone.
 ///            Signatures go through SignatureChecker, so ERC-1271 smart accounts (passkey / P256 wallets) work too.
 ///         3) on approval the update is final and `UpdateAnchored` is the shareholder-facing record.
-///         Four-eyes: the recorder can never approve its own draft.
+///         Four-eyes: an address holding RECORDER_ROLE can never be a director or approve any draft.
 contract UpdateAnchor is AccessControl, EIP712 {
     bytes32 public constant RECORDER_ROLE = keccak256("RECORDER_ROLE");
     bytes32 public constant APPROVE_TYPEHASH =
-        keccak256("ApproveUpdate(uint256 updateId,bytes32 contentHash,uint256 nonce,uint256 deadline)");
+        keccak256("ApproveUpdate(uint256 updateId,bytes32 contentHash,address director,uint256 nonce,uint256 deadline)");
 
     enum Status {
         None,
@@ -66,6 +66,7 @@ contract UpdateAnchor is AccessControl, EIP712 {
     error SelfApproval();
     error BadSignature();
     error Expired();
+    error RecorderCannotBeDirector(address who);
 
     constructor(address admin) EIP712("BlockID UpdateAnchor", "1") {
         if (admin == address(0)) revert ZeroAddress();
@@ -76,6 +77,7 @@ contract UpdateAnchor is AccessControl, EIP712 {
 
     function setDirector(bytes32 companyId, address director, bool enabled) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (director == address(0)) revert ZeroAddress();
+        if (enabled && hasRole(RECORDER_ROLE, director)) revert RecorderCannotBeDirector(director);
         isDirector[companyId][director] = enabled;
         emit DirectorSet(companyId, director, enabled);
     }
@@ -125,7 +127,9 @@ contract UpdateAnchor is AccessControl, EIP712 {
         if (updateId >= _updates.length) revert NotProposed(updateId);
         bytes32 digest = _hashTypedDataV4(
             keccak256(
-                abi.encode(APPROVE_TYPEHASH, updateId, _updates[updateId].contentHash, nonces[director]++, deadline)
+                abi.encode(
+                    APPROVE_TYPEHASH, updateId, _updates[updateId].contentHash, director, nonces[director]++, deadline
+                )
             )
         );
         if (!SignatureChecker.isValidSignatureNow(director, digest, signature)) revert BadSignature();
@@ -142,7 +146,7 @@ contract UpdateAnchor is AccessControl, EIP712 {
     function _approve(uint256 updateId, address director) internal {
         Update storage u = _proposed(updateId);
         if (!isDirector[u.companyId][director]) revert NotDirector(director);
-        if (director == u.recorder) revert SelfApproval();
+        if (director == u.recorder || hasRole(RECORDER_ROLE, director)) revert SelfApproval();
         u.status = Status.Anchored;
         u.approver = director;
         u.anchoredAt = uint64(block.timestamp);

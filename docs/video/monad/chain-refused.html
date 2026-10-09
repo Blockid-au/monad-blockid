@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f7f7fb;font-family:Inter,sans-serif;color:#17172b;width:1920px;height:1080px;overflow:hidden}
+header{height:84px;display:flex;align-items:center;gap:16px;padding:0 120px;background:#fff;border-bottom:1px solid #e4e4ee;font-size:22px}
+header b{color:#6d4aff} header span{color:#6b6b80;font-size:20px}
+section{padding:48px 120px} .step{color:#6d4aff;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:20px;margin:0}
+h1{font-size:46px;margin:10px 0 30px} table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #e4e4ee;border-radius:14px;font-size:24px}
+th{text-align:left;width:230px;color:#6b6b80;font-weight:600;padding:16px 26px;border-bottom:1px solid #eee}
+td{padding:16px 26px;border-bottom:1px solid #eee} code{font-size:21px} .ok{color:#0a8a4a;font-weight:700} .bad{color:#c0263a;font-weight:700}
+.note{margin-top:22px;font-size:22px;color:#4b4b60} .note code{background:#efeefe;padding:2px 8px;border-radius:6px}
+</style></head><body><header><b>Monad testnet</b> chain 10143 <span>· read live from testnet-rpc.monad.xyz</span></header>
+<section><p class="step">Step 4 · the gate</p><h1>A payout against an unapproved update is refused</h1>
+<table><tr><th>Transaction</th><td><code>0xe719266cb99ed4f159f782a3cbf0b7afae213bfef51b7cbc301444087fc4946f</code></td></tr><tr><th>Status</th><td><span class="bad">Reverted by the contract</span></td></tr><tr><th>Block</th><td>69,404,923</td></tr><tr><th>From</th><td>0x2567bb50…cb5ddf <b>Issuer service</b></td></tr><tr><th>To</th><td>0x9575de57…fd9cd9 <b>BatchDividend</b></td></tr><tr><th>Gas used</th><td>200,000 · fee 0.0206 MON</td></tr><tr><th>Events</th><td>none (reverted, no state change)</td></tr></table><p class="note">Update 1 was recorded but never approved by a director. <code>BatchDividend.distribute</code> checks UpdateAnchor itself and reverts with <code>UpdateNotApproved(1)</code>. No money moved.</p></section></body></html>

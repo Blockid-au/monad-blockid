@@ -1,0 +1,12 @@
+1
+00:00:00,050 --> 00:00:02,160
+Step three, the dividend.
+
+2
+00:00:02,160 --> 00:00:09,248
+One transaction pays all twenty holders pro-rata: one point six three million gas, about point one seven testnet MON.
+
+3
+00:00:09,248 --> 00:00:15,097
+Before any transfer, the contract checks the holder list covers the whole share supply, with no duplicates.
+

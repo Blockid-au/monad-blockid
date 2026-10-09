@@ -3,7 +3,7 @@
 #   1) deployer (issuer service): deploy share register + UpdateAnchor + BatchDividend, KYC + issue shares to N
 #      sample holder wallets, record the AI-drafted update (content hash + evidence confidence)        → Proposed
 #   2) director (a DIFFERENT, human-held wallet): approve the update on-chain                           → Anchored
-#   3) deployer: pay a pro-rata mAUD dividend to every holder in ONE transaction (refuses if not approved)
+#   3) deployer: pay a pro-rata mAUD dividend to every holder in ONE transaction (BatchDividend refuses unless the update is approved)
 #   4) publish site/monad-deploy.json for https://monad.blockid.au (addresses, tx hashes, gas used)
 # Keys: encrypted Foundry keystores (~/.foundry/keystores/blockid-{deployer,admin}); passwords in ~/.blockid/*.password.
 # AI agents never touch these keys. Testnet only. Re-runnable: finished steps are skipped.
@@ -76,7 +76,7 @@ fi
 
 RC=$(cast call "$BD" "roundCount()(uint256)" --rpc-url "$RPC")
 if [[ $RC == 0 ]]; then
-  echo "== 3) one transaction pays every holder (guarded by UpdateAnchor.verify)"
+  echo "== 3) one transaction pays every holder (BatchDividend checks the approved update on-chain)"
   PASSPORT_OUT="./deployments/out/$OUT_NAME" forge script script/MonadPassport.s.sol:MonadPassport --sig "pay()" --rpc-url "$RPC" --broadcast --slow \
     "${DEP_ARGS[@]}" > "$LOG-pay.log" 2>&1 || { tail -30 "$LOG-pay.log"; exit 4; }
   grep -E 'paid round' "$LOG-pay.log" || true

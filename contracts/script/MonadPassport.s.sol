@@ -46,7 +46,10 @@ contract MonadPassport is Script {
         }
         d.updateId = d.ua.propose(COMPANY, updateHash, confidence, 5, 1, "https://monad.blockid.au/#update");
         uint256 gasTopUp = vm.envOr("GAS_TOPUP_WEI", uint256(0.05 ether));
-        if (director.balance < gasTopUp) payable(director).transfer(gasTopUp);
+        if (director.balance < gasTopUp) {
+            (bool ok,) = payable(director).call{value: gasTopUp}("");
+            require(ok, "director top-up failed");
+        }
         vm.stopBroadcast();
 
         _write(d, msg.sender, director, updateHash, confidence, holders);
@@ -75,7 +78,8 @@ contract MonadPassport is Script {
         d.ua = new UpdateAnchor(op);
         d.ua.grantRole(d.ua.RECORDER_ROLE(), op); // issuer service records; only the director can approve
         d.ua.setDirector(COMPANY, director, true);
-        d.bd = new BatchDividend(op);
+        d.bd = new BatchDividend(op, d.ua);
+        d.bd.setCompany(address(d.token), COMPANY); // dividends for DEM-ORD must cite an approved DEM update
         d.aud = new DemoAUD(op);
     }
 
@@ -111,16 +115,14 @@ contract MonadPassport is Script {
         address[] memory holders = vm.parseJsonAddressArray(d, ".holders");
         uint256 amount = vm.envOr("DIVIDEND_UNITS", uint256(1000e6)); // 1,000 mAUD (6 decimals)
 
-        // Human gate: the dividend goes out only after the director has approved the update it is declared in.
-        require(
-            ua.verify(vm.parseJsonUint(d, ".updateId"), vm.parseJsonBytes32(d, ".updateHash")),
-            "update not approved by a director"
-        );
+        uint256 updateId = vm.parseJsonUint(d, ".updateId");
+        // Fail early with a clear message; BatchDividend enforces the same gate on-chain (UpdateNotApproved).
+        require(ua.verify(updateId, vm.parseJsonBytes32(d, ".updateHash")), "update not approved by a director");
 
         vm.startBroadcast();
         aud.mint(msg.sender, amount);
         aud.approve(address(bd), amount);
-        uint256 roundId = bd.distribute(token, aud, amount, holders, keccak256("board-resolution-2026-10-dividend"));
+        uint256 roundId = bd.distribute(token, aud, amount, holders, updateId);
         vm.stopBroadcast();
 
         console2.log("paid round", roundId, "holders", holders.length);

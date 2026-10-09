@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f7f7fb;font-family:Inter,sans-serif;color:#17172b;width:1920px;height:1080px;overflow:hidden}
+header{height:84px;display:flex;align-items:center;gap:16px;padding:0 120px;background:#fff;border-bottom:1px solid #e4e4ee;font-size:22px}
+header b{color:#6d4aff} header span{color:#6b6b80;font-size:20px}
+section{padding:48px 120px} .step{color:#6d4aff;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:20px;margin:0}
+h1{font-size:46px;margin:10px 0 30px} table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #e4e4ee;border-radius:14px;font-size:24px}
+th{text-align:left;width:230px;color:#6b6b80;font-weight:600;padding:16px 26px;border-bottom:1px solid #eee}
+td{padding:16px 26px;border-bottom:1px solid #eee} code{font-size:21px} .ok{color:#0a8a4a;font-weight:700} .bad{color:#c0263a;font-weight:700}
+.note{margin-top:22px;font-size:22px;color:#4b4b60} .note code{background:#efeefe;padding:2px 8px;border-radius:6px}
+</style></head><body><header><b>Monad testnet</b> chain 10143 <span>· read live from testnet-rpc.monad.xyz</span></header>
+<section><p class="step">Step 2 · director approval</p><h1>A director approves the AI-drafted update</h1>
+<table><tr><th>Transaction</th><td><code>0x35f1e1e46c1433486e9e1ea249c332e9c34de215a5d2cb8ba56f4c22cd01bb22</code></td></tr><tr><th>Status</th><td><span class="ok">Success</span></td></tr><tr><th>Block</th><td>69,404,670</td></tr><tr><th>From</th><td>0xc4005270…aca21f <b>Director wallet</b></td></tr><tr><th>To</th><td>0x43616f6c…5f04ea <b>UpdateAnchor</b></td></tr><tr><th>Gas used</th><td>62,537 · fee 0.0064 MON</td></tr><tr><th>Events</th><td>UpdateAnchored</td></tr></table><p class="note">Signed by the director wallet, not the issuer service that recorded the draft. Only now does <code>UpdateAnchor.verify(0, hash)</code> return true.</p></section></body></html>

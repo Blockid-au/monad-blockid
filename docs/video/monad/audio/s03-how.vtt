@@ -1,0 +1,24 @@
+1
+00:00:00,050 --> 00:00:01,571
+Here is the flow.
+
+2
+00:00:01,571 --> 00:00:03,493
+The company connects its data.
+
+3
+00:00:03,493 --> 00:00:05,958
+Our AI pipeline drafts the update.
+
+4
+00:00:05,958 --> 00:00:08,469
+The issuer service records it on Monad.
+
+5
+00:00:08,469 --> 00:00:12,361
+A director approves it from a separate wallet, or a passkey smart account.
+
+6
+00:00:12,361 --> 00:00:15,663
+Only then does Monad anchor the update and pay the holders.
+

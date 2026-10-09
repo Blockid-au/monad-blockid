@@ -1,0 +1,16 @@
+1
+00:00:00,050 --> 00:00:01,205
+Step two.
+
+2
+00:00:01,205 --> 00:00:03,752
+The director approves on Monad testnet.
+
+3
+00:00:03,752 --> 00:00:08,599
+This transaction comes from the director's wallet, not from the service that recorded the draft.
+
+4
+00:00:08,599 --> 00:00:14,554
+In fact, the contract never lets a recorder be a director, so the AI side can never sign off its own work.
+

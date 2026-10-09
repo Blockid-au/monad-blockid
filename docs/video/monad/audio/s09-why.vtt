@@ -1,0 +1,16 @@
+1
+00:00:00,050 --> 00:00:01,229
+Why Monad?
+
+2
+00:00:01,229 --> 00:00:05,038
+Paying two hundred holders in one transaction costs about four cents.
+
+3
+00:00:05,038 --> 00:00:11,288
+On Ethereum the same payout is about a hundred and seventy dollars at ten gwei, or two hundred separate claim transactions.
+
+4
+00:00:11,288 --> 00:00:15,745
+And sub-second blocks mean the director sees the payout confirmed on the approval screen.
+

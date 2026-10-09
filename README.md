@@ -25,6 +25,7 @@ paid straight to their wallet.
 | Verify any company (browser-side hash check) | https://eth.blockid.au/verify/EBA |
 | BlockID EVM explorer (Blockscout) | https://scan.blockid.au |
 | **Monad Metropolis 2026 (Track 4)** | https://monad.blockid.au · [docs/MONAD.md](docs/MONAD.md) · branch `monad` · Monad testnet (chain 10143) |
+| Monad demo video (2:30) | https://eth.blockid.au/deck/blockid-business-passport-monad-captions.mp4 |
 | Monad deck · submission pack | https://monad.blockid.au/deck/ · https://monad.blockid.au/submission.html |
 | Pitch deck (3 min) | [PDF](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pdf) · [PPTX](https://eth.blockid.au/deck/BlockID-Business-Passport-3min.pptx) |
 | Video | Demo, 3 min: https://eth.blockid.au/deck/blockid-business-passport-demo-3min-captions.mp4 · full demo, 5:15: https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4 · pitch (slides), 3 min: https://eth.blockid.au/deck/blockid-business-passport-3min-captions.mp4 |
@@ -40,26 +41,27 @@ and is listed as prior work.
 - **UpdateAnchor** ([UpdateAnchor.sol](contracts/src/UpdateAnchor.sol)): the issuer service records an AI-drafted
   shareholder update (content hash, evidence confidence, evidenced / missing claim counts). Only a director of that
   company can approve it — directly or by an EIP-712 signature checked with `SignatureChecker`, so ERC-1271 smart
-  accounts (passkey / P256) work. The recorder can never approve its own draft; `verify(id, hash)` is true only for
-  approved, unchanged content.
+  accounts (passkey / P256) work. An address holding the recorder role can never be a director or approve a draft, and
+  each signature is bound to one director. `verify(id, hash)` is true only for approved, unchanged content.
 - **BatchDividend** ([BatchDividend.sol](contracts/src/BatchDividend.sol)): pays every holder pro-rata in **one
-  transaction**. Holders must be strictly ascending and cover the whole supply, so nobody can be left out. In this
-  testnet build the deploy script checks `UpdateAnchor.verify` before it pays; making `distribute()` itself require an
-  approved update is the next contract change (see Known limitations below).
+  transaction**, and only against a director-approved update for the same company — checked inside the contract, each
+  update pays once, and the update's content hash is stored as the round's resolution. Holders must be strictly
+  ascending and cover the whole supply (checked before any transfer), so nobody can be left out.
 
-Live on Monad testnet (chain 10143), deployed 2026-10-08 by [scripts/monad-demo.sh](scripts/monad-demo.sh):
+Live on Monad testnet (chain 10143), deployed 9 Oct 2026 by [scripts/monad-demo.sh](scripts/monad-demo.sh):
 
 | Contract / step | Address or transaction |
 |---|---|
-| UpdateAnchor | [`0x112C26D5f5d602293f1a00029f5E375763e70282`](https://testnet.monadvision.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
-| BatchDividend | [`0x8cbA8cda3E564A7B0866291061925e7B71f36252`](https://testnet.monadvision.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
-| Share register (BlockIDShareToken) | [`0xf3156Ad6eA559096D4aF350b39984408c764698E`](https://testnet.monadvision.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
-| mAUD (testnet stablecoin) | [`0xC25d1C243530EB34708923F0D5E34C22386bB264`](https://testnet.monadvision.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
-| 1 · AI-drafted update recorded | [`0xc3e77ac0…`](https://testnet.monadvision.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
-| 2 · Director approves (54,157 gas) | [`0xc71205cc…`](https://testnet.monadvision.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
-| 3 · Dividend to 20 holders in one transaction (1,494,099 gas) | [`0xc4b28168…`](https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
+| UpdateAnchor | [`0x43616f6cD253568e0112E6ffe73481bA715F04EA`](https://testnet.monadvision.com/address/0x43616f6cD253568e0112E6ffe73481bA715F04EA) |
+| BatchDividend | [`0x9575De573b8b75eB8Df5b2040D61957353fd9cd9`](https://testnet.monadvision.com/address/0x9575De573b8b75eB8Df5b2040D61957353fd9cd9) |
+| Share register (BlockIDShareToken) | [`0x05fa63890Fcafa445b33ADEaba088A77cbE51B22`](https://testnet.monadvision.com/address/0x05fa63890Fcafa445b33ADEaba088A77cbE51B22) |
+| mAUD (testnet stablecoin) | [`0xF32BF09472A7C41857c5aF281cCbecc1e6631Ba7`](https://testnet.monadvision.com/address/0xF32BF09472A7C41857c5aF281cCbecc1e6631Ba7) |
+| 1 · AI-drafted update recorded | [`0x9a23bd00…`](https://testnet.monadvision.com/tx/0x9a23bd00fae6a0b3837968b5daadbdc4a57efb4d45918945c144d273354e6c90) |
+| 2 · Director approves (62,537 gas) | [`0x35f1e1e4…`](https://testnet.monadvision.com/tx/0x35f1e1e46c1433486e9e1ea249c332e9c34de215a5d2cb8ba56f4c22cd01bb22) |
+| 3 · Dividend to 20 holders in one transaction (1,627,025 gas) | [`0x15ebe321…`](https://testnet.monadvision.com/tx/0x15ebe321aedbb0f987596dab4c936f9e3c08c36465b4b7b6ffb454954968c5f2) |
+| 4 · Payout against an unapproved update — reverted by the contract (`UpdateNotApproved`) | [`0xe719266c…`](https://testnet.monadvision.com/tx/0xe719266cb99ed4f159f782a3cbf0b7afae213bfef51b7cbc301444087fc4946f) |
 
-Gas benchmark (Foundry): 200 holders = 6.56M gas in one transaction (32.8k per holder), versus ≈ 22.6M gas over 200
+Gas benchmark (Foundry): 200 holders = 6.89M gas in one transaction (34.4k per holder), versus ≈ 22.6M gas over 200
 separate Merkle `claimFor` transactions. Holders are generated sample wallets, not customers. Details, run steps and
 the pre-existing / new split: [docs/MONAD.md](docs/MONAD.md).
 
@@ -67,10 +69,11 @@ the pre-existing / new split: [docs/MONAD.md](docs/MONAD.md).
 scripts/monad-demo.sh   # deploy → record update → director approves → one-transaction dividend → site/monad-deploy.json
 ```
 
-**Known limitations (testnet build, from our own review).** The approval check before a payout runs in the deploy
-script, not inside `BatchDividend`; an issuer key can still call `distribute()` directly. Four-eyes stops the
-recording address from approving its own draft, but the contract admin must be a separate multisig for that to mean
-two people. One holder whose transfer reverts (for example a blacklisted stablecoin address) blocks the whole round.
+**Known limitations (testnet build, from our own review).** Four-eyes keeps the recorder and directors apart, but the
+contract admin appoints directors, so in production the admin must be the company's multisig, not the issuer
+service. One holder whose transfer reverts (for example a blacklisted stablecoin address) blocks the whole round. The
+dividend amount is declared in the approved update's content but not parsed on-chain. An earlier deploy (8 Oct, where
+the approval check ran only in the script) is kept as evidence in `contracts/deployments/out/monad-passport-v1.json`.
 
 **AI tools disclosure.** Code, docs and the pitch site were written with Claude Code (Anthropic) under human review.
 AI agents in the product never hold keys: they draft updates, and a human wallet must approve on-chain.

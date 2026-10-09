@@ -132,16 +132,16 @@
     <div class="table-wrap"><table>
       <thead><tr><th data-i18n="w.t0">Dividend run</th><th class="r" data-i18n="w.t1">Gas</th><th class="r" data-i18n="w.t2">Transactions</th><th class="r" data-i18n="w.t3">Cost</th></tr></thead>
       <tbody>
-        <tr class="hl"><td><span data-i18n="w.r1">20 holders on Monad testnet, measured</span> · <a href="https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430">tx</a></td><td class="r">1.49M</td><td class="r">1</td><td class="r">0.157 MON ≈ US$0.004</td></tr>
-        <tr><td data-i18n="w.r2">200 holders on Monad, extrapolated from the measured run</td><td class="r">≈ 14.9M</td><td class="r">1</td><td class="r">≈ US$0.04</td></tr>
-        <tr><td data-i18n="w.r3">200 holders on Ethereum L1, same contract (EVM gas)</td><td class="r">6.56M</td><td class="r">1</td><td class="r">≈ US$2.56 · ≈ US$160 at 10 gwei</td></tr>
+        <tr class="hl"><td><span data-i18n="w.r1">20 holders on Monad testnet, measured</span> · <a href="https://testnet.monadvision.com/tx/0x15ebe321aedbb0f987596dab4c936f9e3c08c36465b4b7b6ffb454954968c5f2">tx</a></td><td class="r">1.63M</td><td class="r">1</td><td class="r">0.171 MON ≈ US$0.004</td></tr>
+        <tr><td data-i18n="w.r2">200 holders on Monad, extrapolated from the measured run</td><td class="r">≈ 16.3M</td><td class="r">1</td><td class="r">≈ US$0.04</td></tr>
+        <tr><td data-i18n="w.r3">200 holders on Ethereum L1, same contract (EVM gas)</td><td class="r">6.89M</td><td class="r">1</td><td class="r">≈ US$2.69 · ≈ US$170 at 10 gwei</td></tr>
         <tr><td data-i18n="w.r4">200 holders with Merkle claims (EVM gas)</td><td class="r">≈ 22.6M</td><td class="r">200</td><td class="r">—</td></tr>
       </tbody>
     </table></div>
     <p class="note" data-i18n="w.note">Monad charges the gas limit, and prices cold state access higher than Ethereum, so we quote Monad costs from the transaction actually charged on Monad testnet (105 gwei). EVM gas comes from Foundry (<code>forge test --match-test bench</code>). Prices read on 8 Oct 2026: MON US$0.0241; ETH US$2,476 at 0.158 gwei.</p>
     <div class="grid g3" style="margin-top:18px">
       <div class="card"><h3 data-i18n="w1.h">Cost that stays flat</h3><p data-i18n="w1.t">Under a cent for 20 holders, a few cents for 200. Small companies can afford monthly payouts and weekly re-anchoring.</p></div>
-      <div class="card"><h3 data-i18n="w2.h">Room in the block</h3><p data-i18n="w2.t">About 400 holders fit in one transaction (30M gas per transaction), and 150M-gas blocks hold several companies' payouts at once. Larger registers split into batches or use the Merkle distributor.</p></div>
+      <div class="card"><h3 data-i18n="w2.h">Room in the block</h3><p data-i18n="w2.t">About 350 holders fit in one transaction (30M gas per transaction), and 150M-gas blocks hold several companies' payouts at once. Larger registers split into batches or use the Merkle distributor.</p></div>
       <div class="card"><h3 data-i18n="w3.h">Fast finality</h3><p data-i18n="w3.t">Sub-second blocks: the director sees the payout confirmed while still on the approval screen, and shareholders see it moments later.</p></div>
     </div>
   </div>
@@ -216,7 +216,7 @@
     <div class="table-wrap"><table><tbody>
       <tr><td data-i18n="k1">Code (MIT)</td><td><a href="https://github.com/Blockid-au/monad-blockid/tree/monad">github.com/Blockid-au/monad-blockid</a> · <span data-i18n="k1b">branch</span> <code>monad</code></td></tr>
       <tr><td data-i18n="k2">Pitch deck</td><td><a href="deck/">monad.blockid.au/deck</a> · <a href="deck/BlockID-Business-Passport-Monad.pdf">PDF</a></td></tr>
-      <tr><td data-i18n="k3">Demo video</td><td id="video-cell"><span data-i18n="k3t">Monad demo video: recorded after the testnet deploy.</span> <a href="https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4" data-i18n="k3l">Product walkthrough (pre-Monad, 5 min)</a></td></tr>
+      <tr><td data-i18n="k3">Demo video</td><td id="video-cell"><a href="video/blockid-business-passport-monad-captions.mp4" data-i18n="k3t">Monad demo, 2:30 (captions)</a> · <a href="https://eth.blockid.au/deck/blockid-business-passport-full-demo-captions.mp4" data-i18n="k3l">Product walkthrough (pre-Monad, 5 min)</a></td></tr>
       <tr><td data-i18n="k4">BlockID app</td><td><a href="https://eth.blockid.au">eth.blockid.au</a></td></tr>
       <tr><td data-i18n="k5">Contact</td><td><a href="mailto:admin@blockid.au">admin@blockid.au</a></td></tr>
     </tbody></table></div>

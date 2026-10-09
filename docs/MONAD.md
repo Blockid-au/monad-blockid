@@ -9,6 +9,7 @@ wallet in one transaction.
 |---|---|
 | Site | https://monad.blockid.au (served from [site/](../site)) |
 | Deck | https://monad.blockid.au/deck/ · [PDF](../site/deck/BlockID-Business-Passport-Monad.pdf) |
+| Demo video (2:30) | https://eth.blockid.au/deck/blockid-business-passport-monad-captions.mp4 |
 | Submission fields (copy-ready) | https://monad.blockid.au/submission.html |
 
 ## Contracts
@@ -25,27 +26,33 @@ wallet in one transaction.
   either directly or with an EIP-712 signature relayed by anyone. The signature is checked with `SignatureChecker`,
   so ERC-1271 smart accounts (passkey / P256) work. The recorder can never approve its own draft. `verify(id, hash)`
   is true only for approved, unchanged content.
-- **BatchDividend:** `distribute(shareToken, payToken, amount, holders, resolutionRef)` pays every holder pro-rata in
-  one transaction. Holders must be strictly ascending (no duplicates) and their balances must add up to total supply
+- **BatchDividend:** `distribute(shareToken, payToken, amount, holders, updateId)` pays every holder pro-rata in
+  one transaction, only if `updateId` is a director-approved update of the company linked to `shareToken`
+  (`setCompany`), and at most once per update; the update's content hash is stored as the round's resolution. Holders must be strictly ascending (no duplicates) and their balances must add up to total supply
   (nobody left out). Dust goes back to the payer. Each holder gets a `DividendPaid` event.
 
-## Live on Monad testnet (deployed 8 Oct 2026)
+## Live on Monad testnet (deployed 9 Oct 2026)
 
 | Contract / step | Address or transaction |
 |---|---|
-| ShareRegister · BlockIDShareToken | [0xf3156Ad6eA559096D4aF350b39984408c764698E](https://testnet.monadvision.com/address/0xf3156Ad6eA559096D4aF350b39984408c764698E) |
-| IdentityRegistry | [0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84](https://testnet.monadvision.com/address/0x6B96bcE8937e1416Ec1DAC4ADAdD71FE879F8e84) |
-| UpdateAnchor | [0x112C26D5f5d602293f1a00029f5E375763e70282](https://testnet.monadvision.com/address/0x112C26D5f5d602293f1a00029f5E375763e70282) |
-| BatchDividend | [0x8cbA8cda3E564A7B0866291061925e7B71f36252](https://testnet.monadvision.com/address/0x8cbA8cda3E564A7B0866291061925e7B71f36252) |
-| mAUD (testnet stablecoin) | [0xC25d1C243530EB34708923F0D5E34C22386bB264](https://testnet.monadvision.com/address/0xC25d1C243530EB34708923F0D5E34C22386bB264) |
-| 1 · AI-drafted update recorded | [0xc3e77ac0a0400a4d…](https://testnet.monadvision.com/tx/0xc3e77ac0a0400a4d9842a42cf93f3cc3c5a559a5db41e7b86da549ec947a5164) |
-| 2 · Director approves (54,157 gas) | [0xc71205cc56044386…](https://testnet.monadvision.com/tx/0xc71205cc5604438655f68f038c352364ebce0b59f3acad8cd78e168d5f43799f) |
-| 3 · Dividend to 20 holders, one transaction (1,494,099 gas) | [0xc4b28168800b675a…](https://testnet.monadvision.com/tx/0xc4b28168800b675a4b4e75f2d92189ed041d45b2c492227bd5ac8d5b2e478430) |
+| ShareRegister · BlockIDShareToken | [0x05fa63890Fcafa445b33ADEaba088A77cbE51B22](https://testnet.monadvision.com/address/0x05fa63890Fcafa445b33ADEaba088A77cbE51B22) |
+| IdentityRegistry | [0x47938329CF7Df5B28Dc5b2FEdb4cBE8357e2106F](https://testnet.monadvision.com/address/0x47938329CF7Df5B28Dc5b2FEdb4cBE8357e2106F) |
+| UpdateAnchor | [0x43616f6cD253568e0112E6ffe73481bA715F04EA](https://testnet.monadvision.com/address/0x43616f6cD253568e0112E6ffe73481bA715F04EA) |
+| BatchDividend | [0x9575De573b8b75eB8Df5b2040D61957353fd9cd9](https://testnet.monadvision.com/address/0x9575De573b8b75eB8Df5b2040D61957353fd9cd9) |
+| mAUD (testnet stablecoin) | [0xF32BF09472A7C41857c5aF281cCbecc1e6631Ba7](https://testnet.monadvision.com/address/0xF32BF09472A7C41857c5aF281cCbecc1e6631Ba7) |
+| 1 · AI-drafted update recorded | [0x9a23bd00fae6a0b3…](https://testnet.monadvision.com/tx/0x9a23bd00fae6a0b3837968b5daadbdc4a57efb4d45918945c144d273354e6c90) |
+| 2 · Director approves (62,537 gas) | [0x35f1e1e46c143348…](https://testnet.monadvision.com/tx/0x35f1e1e46c1433486e9e1ea249c332e9c34de215a5d2cb8ba56f4c22cd01bb22) |
+| 3 · Dividend to 20 holders, one transaction (1,627,025 gas) | [0x15ebe321aedbb0f9…](https://testnet.monadvision.com/tx/0x15ebe321aedbb0f987596dab4c936f9e3c08c36465b4b7b6ffb454954968c5f2) |
+| 4 · Payout against unapproved update 1 — reverted on-chain (`UpdateNotApproved`) | [0xe719266cb99ed4f1…](https://testnet.monadvision.com/tx/0xe719266cb99ed4f159f782a3cbf0b7afae213bfef51b7cbc301444087fc4946f) |
 
-On Monad, the 20-holder payout was charged 1,494,099 gas at 105 gwei: 0.157 MON, about US$0.004. Monad charges the
+The first deploy (8 Oct 2026) checked approval only in the script; it is kept as evidence in
+[monad-passport-v1.json](../contracts/deployments/out/monad-passport-v1.json) and
+[site/monad-deploy-v1.json](../site/monad-deploy-v1.json).
+
+On Monad, the 20-holder payout was charged 1,627,025 gas at 105 gwei: 0.171 MON, about US$0.004. Monad charges the
 gas limit and prices cold state access higher than Ethereum, so Monad costs are quoted from this measured transaction.
-Extrapolated, 200 holders cost about 14.9M gas, about US$0.04, and about 400 holders fit in one 30M-gas transaction.
-The whole run (deploy, issue, propose, approve, pay) cost about 1.46 MON.
+Extrapolated, 200 holders cost about 16.3M gas, about US$0.04, and about 350 holders fit in one 30M-gas transaction.
+The whole run (deploy, issue, propose, approve, pay) cost about 1.6 MON.
 
 ## Benchmark (EVM gas, Foundry)
 
@@ -53,15 +60,15 @@ The whole run (deploy, issue, propose, approve, pay) cost about 1.46 MON.
 
 | Holders | Gas (one transaction) | Gas per holder |
 |---|---|---|
-| 10 | 531,295 | 53,129 |
-| 50 | 1,799,327 | 35,986 |
-| 200 | 6,555,767 | 32,778 |
+| 10 | 615,254 | 61,525 |
+| 50 | 1,950,893 | 39,017 |
+| 200 | 6,886,581 | 34,432 |
 
 For comparison, Merkle `claimFor` has a median of 91,765 gas per holder, plus 21,000 base gas per transaction. For
 200 holders that is ≈ 22.6M gas over 200 transactions.
 
-Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batch costs ≈ US$2.56 on L1, or
-≈ US$160 at 10 gwei.
+Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batch costs ≈ US$2.69 on L1, or
+≈ US$170 at 10 gwei.
 
 ## Monad testnet deploy
 
@@ -78,7 +85,7 @@ Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batc
    1. Deploy, then KYC and issue shares to 20 generated sample wallets, then record the update
       ([monad-update.json](../contracts/deployments/params/monad-update.json)).
    2. The director wallet approves the update.
-   3. One transaction pays the dividend. `pay()` refuses unless `UpdateAnchor.verify` is true.
+   3. One transaction pays the dividend. `BatchDividend` refuses unless the update is director-approved (`pay()` also checks first, for a clear message).
    4. Publish `site/monad-deploy.json`. The site then shows the addresses, transactions, gas and per-holder balances
       by itself.
 3. Commit `site/monad-deploy.json` and `contracts/broadcast/MonadPassport.s.sol/10143/` as evidence.
@@ -86,17 +93,19 @@ Ethereum prices on 8 Oct 2026: 0.158 gwei and ETH US$2,476, so a 200-holder batc
 Local dry run (port 8545 on this server is the BlockID EVM chain, so use another port):
 `anvil --port 8645` and then
 `RPC=http://127.0.0.1:8645 CHAIN_ID=31337 LOCAL_KEYS=1 ANVIL_KEY0=… ANVIL_KEY1=… scripts/monad-demo.sh`.
-Tested on 8 Oct 2026: 20 holders paid in one transaction (847,344 gas), approval 46,182 gas.
+Tested on 9 Oct 2026: 20 holders paid in one transaction (924,022 gas).
 
 ## Built during the hackathon
 
 - [x] Monad network config and deploy scripts
-- [x] `UpdateAnchor.sol`, `BatchDividend.sol`, 15 new tests (52 in total), gas benchmark
+- [x] `UpdateAnchor.sol`, `BatchDividend.sol`, 22 new tests (59 in total), gas benchmark
+- [x] Approval gate inside `BatchDividend` (approved update, same company, once per update); recorder can never be a
+      director; signatures bound to the director. Redeployed 9 Oct 2026, unapproved payout reverted on-chain
 - [x] End-to-end flow on a local chain
 - [x] monad.blockid.au: pitch site (EN/VI), in-browser verification against Monad, live deploy data, deck, submission
       pack
 - [x] Contracts deployed to Monad testnet, with the full flow run on chain (see the table above)
-- [ ] Demo video (≤ 3 min; script on the submission page)
+- [x] Demo video, 2:30: https://eth.blockid.au/deck/blockid-business-passport-monad-captions.mp4 (built by [docs/video/monad](video/monad/README.md))
 - [ ] Passkey sign-in screen for directors in the BlockID app
 
 ## Pre-existing foundation (disclose in the submission)
